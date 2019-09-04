@@ -2,6 +2,8 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import socketIOClient from 'socket.io-client'
 
+import Editor from '../components/Editor'
+
 // Import Tabs Components
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
@@ -111,7 +113,7 @@ const Main = ({ selectedFile }) => {
 				<TabPanels>
 					{state.tabs.map((tab, index) => (
 						<TabPanel key={index}>
-							<pre>{JSON.stringify(tab.content, null, 4)}</pre>
+							<Editor {...tab} />
 						</TabPanel>
 					))}
 				</TabPanels>

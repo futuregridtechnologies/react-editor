@@ -57,9 +57,7 @@
         }
     }
     [data-reach-tab-panel] {
-        padding: var(--spacer-2);
         height: calc(100vh - 72px);
-        overflow-y: auto;
         &:focus {
             outline: none;
         }
@@ -102,6 +100,44 @@
                 &:hover {
                     background: rgba(#000, 0.1);
                 }
+            }
+        }
+    }
+}
+
+.editor__options {
+    height: 58px;
+    @include flex(center, space-between);
+    border-bottom: 1px solid var(--border);
+    padding: 0 var(--spacer-1);
+    .editor__options__left {
+        button {
+            background: transparent;
+            width: 40px;
+            height: 40px;
+            float: left;
+            cursor: pointer;
+            border: none;
+            @include flex(center, center);
+            &:hover {
+                background: rgba(#000, 0.1);
+            }
+        }
+    }
+    .editor__options__right {
+        button {
+            height: 40px;
+            cursor: pointer;
+            padding: 0 8px;
+            margin-left: 8px;
+            &:first-child {
+                border: 1px solid #000;
+                background: transparent;
+            }
+            &:last-child {
+                color: #fff;
+                border: none;
+                background: #666666;
             }
         }
     }
