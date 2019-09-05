@@ -51,7 +51,6 @@
     width: calc(100vw - 304px);
     grid-area: main;
     border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
     [data-reach-tab-list],
     [data-reach-tab-panels] {
         width: calc(100vw - 304px);
@@ -63,5 +62,6 @@
     -ms-grid-row: 2;
     grid-column: 3;
     -ms-grid-column: 3;
-    grid-area: sidebar
+    grid-area: sidebar;
+    border-left: 1px solid var(--border);
 }
