@@ -2,23 +2,23 @@ import React from 'react'
 
 import Modal from '../Modal'
 
-const FileSection = ({ files, selectFile }) => (
+const FileSection = ({ title, files, selectFile }) => (
 	<section>
-		<h2>Menu</h2>
+		<h2>{title}</h2>
 		{files.map((file, index) => (
 			<div key={index}>
 				<span>{file.split('/').pop()}</span>
-				<button onClick={() => selectFile(file)}>Add</button>
+				<button onClick={() => selectFile(title.toLowerCase(), file)}>
+					Add
+				</button>
 			</div>
 		))}
 	</section>
 )
 
-const AddReferenceFile = ({ title, toggleModal }) => {
+const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
 	const [search, setSearch] = React.useState('')
 	const [searchResult, setSearchResult] = React.useState({})
-
-	const selectFile = file => console.log({ file }) || toggleModal(false)
 
 	const hitSearch = () => {
 		const query = `
@@ -67,6 +67,7 @@ const AddReferenceFile = ({ title, toggleModal }) => {
 					<FileSection
 						files={searchResult.menus}
 						selectFile={selectFile}
+						title="Menus"
 					/>
 				)}
 				{searchResult.ingredients &&
@@ -74,24 +75,28 @@ const AddReferenceFile = ({ title, toggleModal }) => {
 						<FileSection
 							files={searchResult.ingredients}
 							selectFile={selectFile}
+							title="Ingredients"
 						/>
 					)}
 				{searchResult.dishes && searchResult.dishes.length > 0 && (
 					<FileSection
 						files={searchResult.dishes}
 						selectFile={selectFile}
+						title="Dishes"
 					/>
 				)}
 				{searchResult.packages && searchResult.packages.length > 0 && (
 					<FileSection
 						files={searchResult.packages}
 						selectFile={selectFile}
+						title="Packages"
 					/>
 				)}
 				{searchResult.recipes && searchResult.recipes.length > 0 && (
 					<FileSection
 						files={searchResult.recipes}
 						selectFile={selectFile}
+						title="Recipes"
 					/>
 				)}
 			</Modal.Body>

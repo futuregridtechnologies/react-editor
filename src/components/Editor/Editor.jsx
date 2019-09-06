@@ -14,12 +14,49 @@ const Editor = ({ content }) => {
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [isTemplateVisible, toggleTemplates] = React.useState(false)
+	const [objectIndex, setObjectIndex] = React.useState(null)
 
 	React.useEffect(() => {
 		monaco.init().then(monaco => {
 			monacoRef.current = monaco
 		})
 	}, [])
+
+	const selectFile = (type, path) => {
+		console.log({ type, path })
+		toggleModal(false)
+		const query = `
+			query getFile($path: String!) {
+				getFile(path: $path) {
+					size
+					name
+					createdAt
+					content
+				}
+			}`
+		const url = process.env.REACT_APP_GRAPHQL_URI
+		const opts = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ query, variables: { path } }),
+		}
+		fetch(url, opts)
+			.then(res => res.json())
+			.then(({ data }) => {
+				const current = JSON.parse(code)
+				switch (type) {
+					case 'ingredients':
+						current.ingredients[
+							objectIndex
+						].name = `@${data.getFile.name}`
+						break
+					default:
+						break
+				}
+				setCode(JSON.stringify(current, null, 2))
+			})
+			.catch(console.error)
+	}
 
 	const referenceFile = () => {
 		toggleModal(!isModalVisible)
@@ -31,7 +68,13 @@ const Editor = ({ content }) => {
 			endLineNumber: position.lineNumber,
 			endColumn: position.column,
 		})
-		console.log(textUntillPosition)
+		let stringifyThatText = JSON.stringify(textUntillPosition)
+		let getIndex = Number(
+			stringifyThatText.slice(
+				stringifyThatText.lastIndexOf('index') + 9
+			)[0]
+		)
+		setObjectIndex(getIndex)
 	}
 
 	function handleEditorDidMount(_, editor) {
@@ -57,9 +100,11 @@ const Editor = ({ content }) => {
 		switch (templateType) {
 			case 'ingredient':
 				if (current.ingredients) {
+					parseTemplateCode.index = current.ingredients.length
 					current.ingredients.push(parseTemplateCode)
 				} else {
 					current.ingredients = []
+					parseTemplateCode.index = current.ingredients.length
 					current.ingredients.push(parseTemplateCode)
 				}
 				break
@@ -85,7 +130,11 @@ const Editor = ({ content }) => {
 			}
 		>
 			{isModalVisible && (
-				<AddReferenceFile title="Add File" toggleModal={toggleModal} />
+				<AddReferenceFile
+					title="Add File"
+					toggleModal={toggleModal}
+					selectFile={selectFile}
+				/>
 			)}
 			<EditorOptions
 				isTemplateVisible={isTemplateVisible}

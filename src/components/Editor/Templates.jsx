@@ -8,7 +8,7 @@ const Templates = ({ appendCode }) => {
 			name: 'Ingredient',
 			type: 'ingredient',
 			code:
-				'{\n  "INDEX": 1,\n  "NAME": "",\n  "SERVING": [\n    {\n      "1": 200\n    }\n  ],\n  "MEASURE": "",\n  "SECTION": "",\n  "PROCESSING": ""\n}',
+				'{\n  "index": 1,\n  "name": "",\n  "measure": "",\n  "processing": ""\n}',
 		},
 	])
 	return (
