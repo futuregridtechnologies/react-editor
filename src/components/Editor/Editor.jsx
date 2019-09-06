@@ -8,7 +8,9 @@ import Templates from './Templates'
 const Editor = ({ content }) => {
 	const monacoRef = useRef()
 	const editorRef = useRef()
-	const [code, setCode] = React.useState(content || '')
+	const [code, setCode] = React.useState(
+		JSON.stringify(content, null, 2) || ''
+	)
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [isTemplateVisible, toggleTemplates] = React.useState(false)
@@ -51,10 +53,15 @@ const Editor = ({ content }) => {
 
 	const appendCode = (templateType, templateCode) => {
 		const current = JSON.parse(code)
+		const parseTemplateCode = JSON.parse(templateCode)
 		switch (templateType) {
 			case 'ingredient':
-				if (current.ingredients)
-					current.ingredients.push(JSON.parse(templateCode))
+				if (current.ingredients) {
+					current.ingredients.push(parseTemplateCode)
+				} else {
+					current.ingredients = []
+					current.ingredients.push(parseTemplateCode)
+				}
 				break
 			default:
 				break
