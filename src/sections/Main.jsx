@@ -2,7 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import socketIOClient from 'socket.io-client'
 
-import Editor from '../components/Editor'
+import Editor from '../components/Editor/Editor'
 
 // Import Tabs Components
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
