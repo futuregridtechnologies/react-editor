@@ -9,8 +9,9 @@
 }
 
 #modal__card {
-    height: 200px;
-    width: 480px;
+    height: auto;
+    width: 480px;    
+    min-height: 432px;
     background: #fff;
     border-radius: 3px;
     @include flex(null, space-between);
@@ -20,13 +21,15 @@
 #modal__card__header {
     height: 32px;
     padding: 0 12px;
-    @include flex(center, null);
+    @include flex(center, space-between);
     border-bottom: 1px solid var(--border);
 }
 
 #modal__card__body {
     padding: 12px;
     flex: 1;
+    max-height: 360px;
+    overflow-y: auto;
 }
 
 #modal__card__footer {

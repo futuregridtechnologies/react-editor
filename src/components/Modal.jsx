@@ -30,7 +30,14 @@ class Modal extends React.Component {
 	render() {
 		return ReactDOM.createPortal(
 			<div id="modal">
-				<div id="modal__card">{this.props.children}</div>
+				<div
+					id="modal__card"
+					className={`${
+						this.props.addClass ? ` ${this.props.addClass}` : ''
+					}`}
+				>
+					{this.props.children}
+				</div>
 			</div>,
 			this.el
 		)
