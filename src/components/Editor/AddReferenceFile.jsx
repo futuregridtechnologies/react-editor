@@ -1,6 +1,9 @@
 import React from 'react'
+import { useLazyQuery } from '@apollo/react-hooks'
 
 import Modal from '../Modal'
+
+import SEARCH_FILES from '../../queries/searchFiles'
 
 const FileSection = ({ title, files, selectFile }) => (
 	<section>
@@ -8,9 +11,7 @@ const FileSection = ({ title, files, selectFile }) => (
 		{files.map((file, index) => (
 			<div key={index}>
 				<span>{file.split('/').pop()}</span>
-				<button onClick={() => selectFile(title.toLowerCase(), file)}>
-					Add
-				</button>
+				<button onClick={() => selectFile('recipes', file)}>Add</button>
 			</div>
 		))}
 	</section>
@@ -19,31 +20,13 @@ const FileSection = ({ title, files, selectFile }) => (
 const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
 	const [search, setSearch] = React.useState('')
 	const [searchResult, setSearchResult] = React.useState({})
+	const [searchFiles, { data: queryFilesData }] = useLazyQuery(SEARCH_FILES)
 
-	const hitSearch = () => {
-		const query = `
-			query searchFiles($path: String!) {
-				searchFiles(path: $path) {
-					menus
-					recipes
-					packages
-					dishes
-					ingredients
-				}
-			}`
-		const url = process.env.REACT_APP_GRAPHQL_URI
-		const opts = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ query, variables: { path: search } }),
+	React.useEffect(() => {
+		if (queryFilesData && Object.keys(queryFilesData).length > 0) {
+			setSearchResult(queryFilesData.searchFiles)
 		}
-		fetch(url, opts)
-			.then(res => res.json())
-			.then(({ data }) => {
-				setSearchResult(data.searchFiles)
-			})
-			.catch(console.error)
-	}
+	}, [queryFilesData])
 
 	const onModalClose = () => toggleModal(false)
 	return (
@@ -60,7 +43,15 @@ const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
 						value={search}
 						onChange={e => setSearch(e.target.value)}
 					/>
-					<button onClick={() => hitSearch()}>Search</button>
+					<button
+						onClick={() =>
+							searchFiles({
+								variables: { path: search },
+							})
+						}
+					>
+						Search
+					</button>
 				</header>
 
 				{searchResult.menus && searchResult.menus.length > 0 && (

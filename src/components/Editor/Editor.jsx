@@ -1,9 +1,12 @@
 import React, { useRef } from 'react'
 import MonacoEditor, { monaco } from '@monaco-editor/react'
+import { useLazyQuery } from '@apollo/react-hooks'
 
 import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
 import Templates from './Templates'
+
+import GET_FILE from '../../queries/getFile'
 
 const Editor = ({ content }) => {
 	const monacoRef = useRef()
@@ -15,6 +18,9 @@ const Editor = ({ content }) => {
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [isTemplateVisible, toggleTemplates] = React.useState(false)
 	const [objectIndex, setObjectIndex] = React.useState(null)
+	const [fileType, setFileType] = React.useState('')
+
+	const [getFile, { data: queryFileData }] = useLazyQuery(GET_FILE)
 
 	React.useEffect(() => {
 		monaco.init().then(monaco => {
@@ -22,40 +28,26 @@ const Editor = ({ content }) => {
 		})
 	}, [])
 
-	const selectFile = (type, path) => {
-		console.log({ type, path })
-		toggleModal(false)
-		const query = `
-			query getFile($path: String!) {
-				getFile(path: $path) {
-					size
-					name
-					createdAt
-					content
-				}
-			}`
-		const url = process.env.REACT_APP_GRAPHQL_URI
-		const opts = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ query, variables: { path } }),
+	React.useEffect(() => {
+		const current = JSON.parse(code)
+		if (queryFileData && Object.keys(queryFileData).length > 0) {
+			switch (fileType) {
+				case 'recipes':
+					current.ingredients[
+						objectIndex
+					].name = `@${queryFileData.getFile.name}`
+					break
+				default:
+					break
+			}
+			setCode(JSON.stringify(current, null, 2))
 		}
-		fetch(url, opts)
-			.then(res => res.json())
-			.then(({ data }) => {
-				const current = JSON.parse(code)
-				switch (type) {
-					case 'ingredients':
-						current.ingredients[
-							objectIndex
-						].name = `@${data.getFile.name}`
-						break
-					default:
-						break
-				}
-				setCode(JSON.stringify(current, null, 2))
-			})
-			.catch(console.error)
+	}, [queryFileData])
+
+	const selectFile = async (type, path) => {
+		toggleModal(false)
+		setFileType(type)
+		await getFile({ variables: { path } })
 	}
 
 	const referenceFile = () => {
