@@ -19,7 +19,7 @@ const RenderTree = ({ setFile, selectedFile }) => {
 	const [data, setData] = React.useState({})
 	const [cursor, setCursor] = React.useState(false)
 	React.useEffect(() => {
-		if (queryData.getFolderWithFiles) {
+		if (queryData && queryData.getFolderWithFiles) {
 			setData({ ...queryData.getFolderWithFiles, toggled: true })
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
