@@ -12,8 +12,9 @@ const Editor = ({ content }) => {
 	const monacoRef = useRef()
 	const editorRef = useRef()
 	const [code, setCode] = React.useState(
-		JSON.stringify(content, null, 2) || ''
+		JSON.stringify(content, null, 4) || ''
 	)
+	console.log({ code })
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [isTemplateVisible, toggleTemplates] = React.useState(false)
@@ -40,7 +41,7 @@ const Editor = ({ content }) => {
 				default:
 					break
 			}
-			setCode(JSON.stringify(current, null, 2))
+			setCode(JSON.stringify(current, null, 4))
 		}
 	}, [queryFileData])
 
@@ -103,7 +104,7 @@ const Editor = ({ content }) => {
 			default:
 				break
 		}
-		setCode(JSON.stringify(current, null, 2))
+		setCode(JSON.stringify(current, null, 4))
 	}
 
 	const options = {
