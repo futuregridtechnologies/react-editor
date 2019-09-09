@@ -12,9 +12,8 @@ const Editor = ({ content }) => {
 	const monacoRef = useRef()
 	const editorRef = useRef()
 	const [code, setCode] = React.useState(
-		JSON.stringify(content, null, 4) || ''
+		JSON.stringify(content, null, 2) || ''
 	)
-	console.log({ code })
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [isTemplateVisible, toggleTemplates] = React.useState(false)
@@ -33,7 +32,7 @@ const Editor = ({ content }) => {
 		const current = JSON.parse(code)
 		if (queryFileData && Object.keys(queryFileData).length > 0) {
 			switch (fileType) {
-				case 'recipes':
+				case 'ingredients':
 					current.ingredients[
 						objectIndex
 					].name = `@${queryFileData.getFile.name}`
@@ -41,7 +40,7 @@ const Editor = ({ content }) => {
 				default:
 					break
 			}
-			setCode(JSON.stringify(current, null, 4))
+			setCode(JSON.stringify(current, null, 2))
 		}
 	}, [queryFileData])
 
@@ -104,7 +103,7 @@ const Editor = ({ content }) => {
 			default:
 				break
 		}
-		setCode(JSON.stringify(current, null, 4))
+		setCode(JSON.stringify(current, null, 2))
 	}
 
 	const options = {
