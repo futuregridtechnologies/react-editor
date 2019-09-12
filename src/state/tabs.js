@@ -13,7 +13,7 @@ export const reducer = (state, action) => {
 						...state.tabs,
 						{
 							name: action.payload.name,
-							content: action.payload.content,
+							content: JSON.parse(action.payload.content),
 						},
 					],
 					currentTab:
