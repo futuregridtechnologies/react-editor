@@ -1,5 +1,7 @@
+const storage = localStorage.getItem('apollo-cache-persist')
+
 export const initialState = {
-	tabs: [],
+	tabs: storage ? JSON.parse(storage).ROOT_QUERY.tabs.json : [],
 	currentTab: 0,
 	isTabDropDownVisible: false,
 }
@@ -13,7 +15,7 @@ export const reducer = (state, action) => {
 						...state.tabs,
 						{
 							name: action.payload.name,
-							content: JSON.parse(action.payload.content),
+							content: action.payload.content,
 						},
 					],
 					currentTab:

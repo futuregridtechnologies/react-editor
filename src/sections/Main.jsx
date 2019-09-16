@@ -1,5 +1,6 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import socketIOClient from 'socket.io-client'
 
 import Editor from '../components/Editor/Editor'
@@ -26,8 +27,34 @@ import isJson from '../utils/isJson'
 // Import State
 import { initialState, reducer } from '../state/tabs'
 
+const GET_TABS = gql`
+	{
+		tabs @client
+	}
+`
+
+const ADD_TAB = gql`
+	mutation addTab($file: String) {
+		addTab(file: $file) @client
+	}
+`
+
+const REMOVE_ALL_TABS = gql`
+	mutation removeAllTabs {
+		removeAllTabs @client
+	}
+`
+const REMOVE_TAB = gql`
+	mutation removeTab($index: Int) {
+		removeTab(index: $index) @client
+	}
+`
+
 const Main = ({ selectedFile }) => {
 	const [state, dispatch] = React.useReducer(reducer, initialState)
+	const [addTabMutation] = useMutation(ADD_TAB)
+	const [removeAllTabsMutation] = useMutation(REMOVE_ALL_TABS)
+	const [removeTabMutation] = useMutation(REMOVE_TAB)
 	const { data: queryData } = useQuery(GET_FILE, {
 		variables: { path: selectedFile.path },
 	})
@@ -37,9 +64,27 @@ const Main = ({ selectedFile }) => {
 			Object.keys(queryData).length !== 0 &&
 			isJson(queryData.getFile.content)
 		) {
-			dispatch({ type: 'addTab', payload: queryData.getFile })
+			addTab(queryData.getFile)
 		}
 	}, [queryData, selectedFile])
+
+	const addTab = file => {
+		const tabData = {
+			name: file.name,
+			content: file.content,
+		}
+		addTabMutation({
+			variables: {
+				file: tabData,
+			},
+		})
+		dispatch({ type: 'addTab', payload: file })
+	}
+
+	const closeAllTabs = () => {
+		removeAllTabsMutation()
+		dispatch({ type: 'closeAllTabs' })
+	}
 
 	React.useEffect(() => {
 		const socket = socketIOClient(
@@ -98,6 +143,11 @@ const Main = ({ selectedFile }) => {
 							<span
 								onClick={e => {
 									e.stopPropagation()
+									removeTabMutation({
+										variables: {
+											index,
+										},
+									})
 									dispatch({
 										type: 'removeTab',
 										payload: index,
@@ -138,11 +188,7 @@ const Main = ({ selectedFile }) => {
 				{state.isTabDropDownVisible && (
 					<div id="tab__options">
 						<ul>
-							<li
-								onClick={() =>
-									dispatch({ type: 'closeAllTabs' })
-								}
-							>
+							<li onClick={() => closeAllTabs()}>
 								Close All Tabs
 							</li>
 						</ul>

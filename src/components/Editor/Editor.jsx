@@ -12,7 +12,7 @@ const Editor = ({ content }) => {
 	const monacoRef = useRef()
 	const editorRef = useRef()
 	const [code, setCode] = React.useState(
-		JSON.stringify(content, null, 2) || ''
+		JSON.stringify(JSON.parse(content), null, 4)
 	)
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
