@@ -7,6 +7,7 @@ const GET_FILE = gql`
 			name
 			createdAt
 			content
+			commits
 		}
 	}
 `

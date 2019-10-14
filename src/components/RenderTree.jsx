@@ -14,7 +14,7 @@ const RenderTree = ({ setFile, selectedFile }) => {
 		error: queryError,
 		data: queryData,
 	} = useQuery(GET_EXPLORER_CONTENT, {
-		variables: { path: './filesystem' },
+		variables: { path: './../apps' },
 	})
 	const [data, setData] = React.useState({})
 	const [cursor, setCursor] = React.useState(false)

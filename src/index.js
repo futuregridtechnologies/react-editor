@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { persistCache } from 'apollo-cache-persist'
 import { HttpLink } from 'apollo-link-http'
 import { ApolloLink } from 'apollo-link'
 
@@ -20,16 +19,6 @@ import App from './App'
 import './styles/index.scss'
 
 const cache = new InMemoryCache()
-
-const persist = async () => {
-	return await persistCache({
-		cache,
-		debug: process.env.NODE_ENV === 'development' ? true : false,
-		storage: window.localStorage,
-	})
-}
-
-persist()
 
 const client = new ApolloClient({
 	link: ApolloLink.from([

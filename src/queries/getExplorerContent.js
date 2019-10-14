@@ -22,6 +22,26 @@ const GET_EXPLORER_CONTENT = gql`
 							name
 							path
 							type
+							children {
+								name
+								path
+								type
+								children {
+									name
+									path
+									type
+									children {
+										name
+										path
+										type
+										children {
+											name
+											path
+											type
+										}
+									}
+								}
+							}
 						}
 					}
 				}

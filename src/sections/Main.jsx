@@ -1,7 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import socketIOClient from 'socket.io-client'
 
 import Editor from '../components/Editor/Editor'
 
@@ -21,7 +20,6 @@ import {
 import GET_FILE from '../queries/getFile'
 
 // Import Util Functions
-import fetchCall from '../utils/fetchCall'
 import isJson from '../utils/isJson'
 
 // Import State
@@ -85,41 +83,6 @@ const Main = ({ selectedFile }) => {
 		removeAllTabsMutation()
 		dispatch({ type: 'closeAllTabs' })
 	}
-
-	React.useEffect(() => {
-		const socket = socketIOClient(
-			'ec2-18-219-87-48.us-east-2.compute.amazonaws.com:3000'
-		)
-
-		socket.on('OpenedFiles', async (from, path) => {
-			const url = process.env.REACT_APP_GRAPHQL_URI
-			const opts = {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					query: `
-					query getFile($path: String!) {
-						getFile(path: $path) {
-							size
-							name
-							createdAt
-							content
-						}
-					}
-				`,
-					variables: {
-						path,
-					},
-				}),
-			}
-			fetchCall(url, opts).then(async data => {
-				const { getFile } = await data.data
-				if (getFile && getFile.hasOwnProperty('name')) {
-					dispatch({ type: 'addTab', payload: getFile })
-				}
-			})
-		})
-	}, [])
 
 	if (state.tabs.length === 0) {
 		return <main id="main">Select a file from the explorer.</main>
