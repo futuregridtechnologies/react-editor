@@ -1,11 +1,14 @@
 import React from 'react'
-import gql from 'graphql-tag'
-import { useQuery, useMutation } from '@apollo/react-hooks'
-
 import Editor from '../components/Editor/Editor'
+
+import { Context } from '../state/context'
 
 // Import Tabs Components
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
+
+import fetchCall from '../utils/fetchCall'
+
+import { GET_FILE_FETCH } from '../queries/getFile'
 
 // Import Icons
 import {
@@ -16,71 +19,25 @@ import {
 	CaretUpIcon,
 } from '../assets/Icons'
 
-// Import Queries
-import GET_FILE from '../queries/getFile'
+const Main = () => {
+	const { state, dispatch } = React.useContext(Context)
 
-// Import Util Functions
-import isJson from '../utils/isJson'
-
-// Import State
-import { initialState, reducer } from '../state/tabs'
-
-const GET_TABS = gql`
-	{
-		tabs @client
-	}
-`
-
-const ADD_TAB = gql`
-	mutation addTab($file: String) {
-		addTab(file: $file) @client
-	}
-`
-
-const REMOVE_ALL_TABS = gql`
-	mutation removeAllTabs {
-		removeAllTabs @client
-	}
-`
-const REMOVE_TAB = gql`
-	mutation removeTab($index: Int) {
-		removeTab(index: $index) @client
-	}
-`
-
-const Main = ({ selectedFile }) => {
-	const [state, dispatch] = React.useReducer(reducer, initialState)
-	const [addTabMutation] = useMutation(ADD_TAB)
-	const [removeAllTabsMutation] = useMutation(REMOVE_ALL_TABS)
-	const [removeTabMutation] = useMutation(REMOVE_TAB)
-	const { data: queryData } = useQuery(GET_FILE, {
-		variables: { path: selectedFile.path },
-	})
 	React.useEffect(() => {
-		if (
-			queryData &&
-			Object.keys(queryData).length !== 0 &&
-			isJson(queryData.getFile.content)
-		) {
-			addTab(queryData.getFile)
+		if (state.currentFile.path !== '') {
+			const body = JSON.stringify({
+				query: GET_FILE_FETCH,
+				variables: {
+					path: state.currentFile.path,
+				},
+			})
+			fetchCall(body).then(({ data }) => {
+				const { getFile } = data
+				dispatch({ type: 'ADD_TAB', payload: getFile })
+			})
 		}
-	}, [queryData, selectedFile])
-
-	const addTab = file => {
-		const tabData = {
-			name: file.name,
-			content: file.content,
-		}
-		addTabMutation({
-			variables: {
-				file: tabData,
-			},
-		})
-		dispatch({ type: 'addTab', payload: file })
-	}
+	}, [state.currentFile])
 
 	const closeAllTabs = () => {
-		removeAllTabsMutation()
 		dispatch({ type: 'closeAllTabs' })
 	}
 
@@ -106,11 +63,6 @@ const Main = ({ selectedFile }) => {
 							<span
 								onClick={e => {
 									e.stopPropagation()
-									removeTabMutation({
-										variables: {
-											index,
-										},
-									})
 									dispatch({
 										type: 'removeTab',
 										payload: index,

@@ -1,10 +1,9 @@
 import React from 'react'
-
 import RenderTree from '../components/RenderTree'
 
 import { CollapseLeftIcon, ExpandRightIcon } from '../assets/Icons'
 
-const Navbar = ({ isNavbarCollapsed, setNavbarState, setFile }) => {
+const Navbar = ({ isNavbarCollapsed, setNavbarState }) => {
 	return (
 		<aside id="navbar">
 			<div id="navbar__header">
@@ -16,7 +15,7 @@ const Navbar = ({ isNavbarCollapsed, setNavbarState, setFile }) => {
 				</div>
 			</div>
 			<div id="navbar__explorer">
-				<RenderTree setFile={setFile} />
+				<RenderTree />
 			</div>
 		</aside>
 	)

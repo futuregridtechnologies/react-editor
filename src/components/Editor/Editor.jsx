@@ -6,7 +6,7 @@ import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
 import Templates from './Templates'
 
-import GET_FILE from '../../queries/getFile'
+import { GET_FILE } from '../../queries/getFile'
 
 const Editor = ({ content }) => {
 	const monacoRef = useRef()

@@ -1,14 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Treebeard } from 'react-treebeard'
 import { useQuery } from '@apollo/react-hooks'
 
 // Queries
 import GET_EXPLORER_CONTENT from '../queries/getExplorerContent'
 
+import { Context } from '../state/context'
+
 import { FolderClosedIcon, FolderOpenIcon, FileIcon } from '../assets/Icons'
 
-const RenderTree = ({ setFile, selectedFile }) => {
+const RenderTree = () => {
+	const { dispatch } = React.useContext(Context)
 	const {
 		loading: queryLoading,
 		error: queryError,
@@ -16,14 +18,17 @@ const RenderTree = ({ setFile, selectedFile }) => {
 	} = useQuery(GET_EXPLORER_CONTENT, {
 		variables: { path: './../apps' },
 	})
+
 	const [data, setData] = React.useState({})
 	const [cursor, setCursor] = React.useState(false)
+
 	React.useEffect(() => {
 		if (queryData && queryData.getFolderWithFiles) {
 			setData({ ...queryData.getFolderWithFiles, toggled: true })
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [queryData])
+
 	const onToggle = (node, toggled) => {
 		if (cursor) {
 			cursor.active = false
@@ -34,7 +39,10 @@ const RenderTree = ({ setFile, selectedFile }) => {
 		}
 		setCursor(node)
 		if (node.type === 'file') {
-			setFile({ path: node.path, type: node.type })
+			dispatch({
+				type: 'CURRENT_FILE',
+				payload: { path: node.path, type: node.type },
+			})
 		}
 		setData(Object.assign({}, data))
 	}
@@ -109,10 +117,6 @@ const RenderTree = ({ setFile, selectedFile }) => {
 			decorators={decorators}
 		/>
 	)
-}
-
-RenderTree.propTypes = {
-	setFile: PropTypes.func.isRequired,
 }
 
 export default RenderTree

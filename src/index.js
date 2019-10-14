@@ -8,10 +8,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import { ApolloLink } from 'apollo-link'
 
-// Schema
-import typeDefs from './queries/typeDefs'
-import resolvers from './queries/resolvers'
-
 // Components
 import App from './App'
 
@@ -27,14 +23,6 @@ const client = new ApolloClient({
 		}),
 	]),
 	cache,
-	typeDefs,
-	resolvers,
-})
-
-cache.writeData({
-	data: {
-		tabs: [],
-	},
 })
 
 ReactDOM.render(

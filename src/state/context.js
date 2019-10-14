@@ -1,16 +1,32 @@
-const storage = localStorage.getItem('apollo-cache-persist')
+import React from 'react'
 
-export const initialState = {
-	tabs: storage ? JSON.parse(storage).ROOT_QUERY.tabs.json : [],
+const Context = React.createContext()
+
+const initialState = {
+	tabs: [],
 	currentTab: 0,
+	currentFile: { path: '', type: '' },
 	isTabDropDownVisible: false,
 }
 
-export const reducer = (state, action) => {
+const reducers = (state, action) => {
 	switch (action.type) {
-		case 'addTab': {
+		case 'CURRENT_FILE': {
+			return {
+				...state,
+				currentFile: {
+					path: action.payload.path,
+					type: action.payload.type,
+				},
+			}
+		}
+		case 'CLOSE_CURRENT_FILE': {
+			return state
+		}
+		case 'ADD_TAB': {
 			if (!state.tabs.some(tab => tab.name === action.payload.name)) {
 				return {
+					...state,
 					tabs: [
 						...state.tabs,
 						{
@@ -31,6 +47,7 @@ export const reducer = (state, action) => {
 		}
 		case 'removeTab':
 			return {
+				...state,
 				tabs: [
 					...state.tabs.filter(
 						(_, tabIndex) => tabIndex !== action.payload
@@ -66,6 +83,7 @@ export const reducer = (state, action) => {
 			}
 		case 'closeAllTabs':
 			return {
+				...state,
 				tabs: [],
 				currentTab: 0,
 				isTabDropDownVisible: false,
@@ -74,3 +92,5 @@ export const reducer = (state, action) => {
 			return state
 	}
 }
+
+export { Context, initialState, reducers }
