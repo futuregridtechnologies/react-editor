@@ -2,30 +2,41 @@ import React from 'react'
 
 const Context = React.createContext()
 
-const initialState = {
-	tabs: [],
-	currentTab: 0,
-	currentFile: { path: '', type: '' },
-	isTabDropDownVisible: false,
-}
+const storedState = localStorage.getItem('state')
+
+const initialState = localStorage.getItem('state')
+	? JSON.parse(storedState)
+	: {
+			tabs: [],
+			currentTab: 0,
+			currentFile: { path: '', type: '' },
+			isTabDropDownVisible: false,
+	  }
 
 const reducers = (state, action) => {
 	switch (action.type) {
 		case 'CURRENT_FILE': {
-			return {
+			const newState = {
 				...state,
 				currentFile: {
 					path: action.payload.path,
 					type: action.payload.type,
 				},
 			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
 		}
 		case 'CLOSE_CURRENT_FILE': {
-			return state
+			const newState = {
+				...state,
+				currentFile: { path: '', type: '' },
+			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
 		}
 		case 'ADD_TAB': {
 			if (!state.tabs.some(tab => tab.name === action.payload.name)) {
-				return {
+				const newState = {
 					...state,
 					tabs: [
 						...state.tabs,
@@ -37,16 +48,20 @@ const reducers = (state, action) => {
 					currentTab:
 						state.tabs.length === 0 ? 0 : state.currentTab + 1,
 				}
+				localStorage.setItem('state', JSON.stringify(newState))
+				return newState
 			}
-			return {
+			const newState = {
 				...state,
 				currentTab: state.tabs.findIndex(
 					tab => tab.name === action.payload.name
 				),
 			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
 		}
-		case 'removeTab':
-			return {
+		case 'removeTab': {
+			const newState = {
 				...state,
 				tabs: [
 					...state.tabs.filter(
@@ -55,39 +70,57 @@ const reducers = (state, action) => {
 				],
 				currentTab: state.currentTab === 0 ? 0 : state.currentTab - 1,
 			}
-		case 'setTabIndex':
-			return {
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'setTabIndex': {
+			const newState = {
 				...state,
 				currentTab: action.payload,
 			}
-		case 'leftTab':
-			return {
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'leftTab': {
+			const newState = {
 				...state,
 				currentTab:
 					state.currentTab === 0
 						? state.currentTab
 						: state.currentTab - 1,
 			}
-		case 'rightTab':
-			return {
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'rightTab': {
+			const newState = {
 				...state,
 				currentTab:
 					state.tabs.length - 1 === state.currentTab
 						? state.currentTab
 						: state.currentTab + 1,
 			}
-		case 'toggleTabDropdown':
-			return {
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'toggleTabDropdown': {
+			const newState = {
 				...state,
 				isTabDropDownVisible: action.payload,
 			}
-		case 'closeAllTabs':
-			return {
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'closeAllTabs': {
+			const newState = {
 				...state,
 				tabs: [],
 				currentTab: 0,
 				isTabDropDownVisible: false,
 			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
 		default:
 			return state
 	}

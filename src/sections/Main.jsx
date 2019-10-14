@@ -33,6 +33,9 @@ const Main = () => {
 			fetchCall(body).then(({ data }) => {
 				const { getFile } = data
 				dispatch({ type: 'ADD_TAB', payload: getFile })
+				dispatch({
+					type: 'CLOSE_CURRENT_FILE',
+				})
 			})
 		}
 	}, [state.currentFile])
