@@ -1,12 +1,13 @@
 import React, { useRef } from 'react'
 import MonacoEditor, { monaco } from '@monaco-editor/react'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
 import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
 import History from './History'
 
 import { GET_FILE } from '../../queries/getFile'
+import UPDATE_FILE from '../../queries/updateFile'
 import { Context } from '../../state/context'
 
 const Editor = ({ content, commits, path }) => {
@@ -24,6 +25,7 @@ const Editor = ({ content, commits, path }) => {
 	const [fileType, setFileType] = React.useState('')
 
 	const [getFile, { data: queryFileData }] = useLazyQuery(GET_FILE)
+	const [updateFile] = useMutation(UPDATE_FILE)
 
 	React.useEffect(() => {
 		monaco.init().then(monaco => {
@@ -89,6 +91,18 @@ const Editor = ({ content, commits, path }) => {
 		})
 	}
 
+	const publish = message => {
+		const code = editorRef.current.getValue()
+		updateFile({
+			variables: {
+				path: path,
+				data: code,
+				commitMessage: message,
+				validatedFor: [],
+			},
+		})
+	}
+
 	const options = {
 		fontFamily: 'monospace',
 		fontSize: '16px',
@@ -111,7 +125,7 @@ const Editor = ({ content, commits, path }) => {
 					selectFile={selectFile}
 				/>
 			)}
-			<EditorOptions />
+			<EditorOptions publish={publish} />
 			<MonacoEditor
 				height="100vh"
 				width="calc(100% - 1px)"
