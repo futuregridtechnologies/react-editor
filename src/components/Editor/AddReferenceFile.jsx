@@ -26,7 +26,7 @@ const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
 
 	React.useEffect(() => {
 		if (queryFilesData && Object.keys(queryFilesData).length > 0) {
-			setSearchResult(queryFilesData.searchFiles)
+			setSearchResult(JSON.parse(queryFilesData.searchFiles))
 		}
 	}, [queryFilesData])
 
@@ -48,50 +48,21 @@ const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
 					<button
 						onClick={() =>
 							searchFiles({
-								variables: { path: search },
+								variables: { fileName: search },
 							})
 						}
 					>
 						Search
 					</button>
 				</header>
-
-				{searchResult.menus && searchResult.menus.length > 0 && (
+				{Object.keys(searchResult).map(app => (
 					<FileSection
-						files={searchResult.menus}
+						key={app}
+						files={searchResult[app]}
 						selectFile={selectFile}
-						title="Menus"
+						title={app}
 					/>
-				)}
-				{searchResult.ingredients &&
-					searchResult.ingredients.length > 0 && (
-						<FileSection
-							files={searchResult.ingredients}
-							selectFile={selectFile}
-							title="Ingredients"
-						/>
-					)}
-				{searchResult.dishes && searchResult.dishes.length > 0 && (
-					<FileSection
-						files={searchResult.dishes}
-						selectFile={selectFile}
-						title="Dishes"
-					/>
-				)}
-				{searchResult.packages && searchResult.packages.length > 0 && (
-					<FileSection
-						files={searchResult.packages}
-						selectFile={selectFile}
-						title="Packages"
-					/>
-				)}
-				{searchResult.recipes && searchResult.recipes.length > 0 && (
-					<FileSection
-						files={searchResult.recipes}
-						selectFile={selectFile}
-						title="Recipes"
-					/>
-				)}
+				))}
 			</Modal.Body>
 			<Modal.Footer>
 				<button onClick={() => onModalClose()}>Cancel</button>

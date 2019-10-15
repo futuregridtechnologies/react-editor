@@ -37,7 +37,7 @@ const reducers = (state, action) => {
 			return newState
 		}
 		case 'ADD_TAB': {
-			if (!state.tabs.some(tab => tab.name === action.payload.name)) {
+			if (!state.tabs.some(tab => tab.path === action.payload.path)) {
 				const newState = {
 					...state,
 					tabs: [

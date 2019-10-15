@@ -1,12 +1,12 @@
 import React, { useRef } from 'react'
 import MonacoEditor, { monaco } from '@monaco-editor/react'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 
 import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
 import History from './History'
 
-import { GET_FILE, GET_FILE_FETCH } from '../../queries/getFile'
+import { GET_FILE_FETCH } from '../../queries/getFile'
 import UPDATE_FILE from '../../queries/updateFile'
 
 import fetchCall from '../../utils/fetchCall'
@@ -23,10 +23,6 @@ const Editor = ({ path }) => {
 	const [file, setFile] = React.useState({})
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
-	const [objectIndex, setObjectIndex] = React.useState(null)
-	const [fileType, setFileType] = React.useState('')
-
-	const [getFile, { data: queryFileData }] = useLazyQuery(GET_FILE)
 	const [updateFile] = useMutation(UPDATE_FILE)
 
 	React.useEffect(() => {
@@ -51,27 +47,25 @@ const Editor = ({ path }) => {
 
 	const selectFile = async (type, path) => {
 		toggleModal(false)
-		setFileType(type)
-		await getFile({ variables: { path } })
-	}
-
-	const referenceFile = () => {
-		toggleModal(!isModalVisible)
-		const model = editorRef.current.getModel()
 		const position = editorRef.current.getPosition()
-		const textUntillPosition = model.getValueInRange({
-			startLineNumber: 1,
-			startColumn: 1,
-			endLineNumber: position.lineNumber,
-			endColumn: position.column,
-		})
-		let stringifyThatText = JSON.stringify(textUntillPosition)
-		let getIndex = Number(
-			stringifyThatText.slice(
-				stringifyThatText.lastIndexOf('index') + 9
-			)[0]
+
+		const range = new monacoRef.current.Range(
+			position.lineNumber,
+			position.column,
+			position.lineNumber,
+			position.column
 		)
-		setObjectIndex(getIndex)
+
+		const id = { major: 1, minor: 1 }
+		let index = path.lastIndexOf('/') + 1
+		const text = path.slice(index)
+		const op = {
+			identifier: id,
+			range: range,
+			text: text,
+			forceMoveMarkers: true,
+		}
+		editorRef.current.executeEdits(code, [op])
 	}
 
 	function handleEditorDidMount(_, editor) {
@@ -81,7 +75,7 @@ const Editor = ({ path }) => {
 
 		editorRef.current.addCommand(
 			monacoRef.current.KeyMod.Shift | monacoRef.current.KeyCode.KEY_2,
-			() => referenceFile()
+			() => toggleModal(!isModalVisible)
 		)
 	}
 
