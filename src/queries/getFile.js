@@ -20,6 +20,7 @@ const GET_FILE_FETCH = `
 			createdAt
 			content
 			commits
+			path
 		}
 	}
 `

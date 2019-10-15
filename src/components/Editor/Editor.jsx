@@ -4,19 +4,22 @@ import { useLazyQuery } from '@apollo/react-hooks'
 
 import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
-import Templates from './Templates'
+import History from './History'
 
 import { GET_FILE } from '../../queries/getFile'
+import { Context } from '../../state/context'
 
-const Editor = ({ content }) => {
+const Editor = ({ content, commits, path }) => {
 	const monacoRef = useRef()
 	const editorRef = useRef()
+
+	const { state } = React.useContext(Context)
+
 	const [code, setCode] = React.useState(
 		JSON.stringify(JSON.parse(content), null, 4)
 	)
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
-	const [isTemplateVisible, toggleTemplates] = React.useState(false)
 	const [objectIndex, setObjectIndex] = React.useState(null)
 	const [fileType, setFileType] = React.useState('')
 
@@ -86,26 +89,6 @@ const Editor = ({ content }) => {
 		})
 	}
 
-	const appendCode = (templateType, templateCode) => {
-		const current = JSON.parse(code)
-		const parseTemplateCode = JSON.parse(templateCode)
-		switch (templateType) {
-			case 'ingredient':
-				if (current.ingredients) {
-					parseTemplateCode.index = current.ingredients.length
-					current.ingredients.push(parseTemplateCode)
-				} else {
-					current.ingredients = []
-					parseTemplateCode.index = current.ingredients.length
-					current.ingredients.push(parseTemplateCode)
-				}
-				break
-			default:
-				break
-		}
-		setCode(JSON.stringify(current, null, 2))
-	}
-
 	const options = {
 		fontFamily: 'monospace',
 		fontSize: '16px',
@@ -116,8 +99,8 @@ const Editor = ({ content }) => {
 	return (
 		<div
 			className={
-				isTemplateVisible
-					? 'editor__wrapper withTemplates'
+				state.isHistoryVisible
+					? 'editor__wrapper withHistory'
 					: 'editor__wrapper'
 			}
 		>
@@ -128,10 +111,7 @@ const Editor = ({ content }) => {
 					selectFile={selectFile}
 				/>
 			)}
-			<EditorOptions
-				isTemplateVisible={isTemplateVisible}
-				toggleTemplates={toggleTemplates}
-			/>
+			<EditorOptions />
 			<MonacoEditor
 				height="100vh"
 				width="calc(100% - 1px)"
@@ -141,7 +121,9 @@ const Editor = ({ content }) => {
 				options={options}
 				editorDidMount={handleEditorDidMount}
 			/>
-			{isTemplateVisible && <Templates appendCode={appendCode} />}
+			{state.isHistoryVisible && (
+				<History commits={commits} path={path} />
+			)}
 		</div>
 	)
 }

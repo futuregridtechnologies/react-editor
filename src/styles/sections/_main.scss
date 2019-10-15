@@ -116,11 +116,14 @@
     &.withTemplates {
         grid-template-areas: "head head head head" "main main main aside";
     }
+    &.withHistory {
+        grid-template-areas: "head head head head" "main main main aside";
+    }
 }
 
 .editor__options {
     height: 48px;
-    @include flex(center, space-between);
+    @include flex(center, null);
     border-bottom: 1px solid var(--border);
     padding: 0 var(--spacer-1);
     grid-area: head;
@@ -138,7 +141,7 @@
     }
 }
 
-.templates {
+#history__panel {
     grid-area: aside;
     overflow-y: auto;
     height: calc(100vh - 120px);
@@ -152,18 +155,10 @@
         font-size: 24px;
         margin-bottom: calc(var(--base-pt) * 2px);
     }
-    .templates__search {
-        width: 100%;
-        height: 40px;
-        padding-left: var(--spacer-2);
-        border-radius: calc(var(--base-pt) * 0.5px);
-        border: 1px solid var(--border);
-        margin-bottom: calc(var(--base-pt) * 2px);
-    }
     main {
         padding:0 var(--spacer-2);
     }
-    .templates__item {
+    .commit {
         height: 48px;
         @include flex(center, space-between);
         padding:0 var(--spacer-2);

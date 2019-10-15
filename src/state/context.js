@@ -11,6 +11,7 @@ const initialState = localStorage.getItem('state')
 			currentTab: 0,
 			currentFile: { path: '', type: '' },
 			isTabDropDownVisible: false,
+			isHistoryVisible: false,
 	  }
 
 const reducers = (state, action) => {
@@ -22,6 +23,7 @@ const reducers = (state, action) => {
 					path: action.payload.path,
 					type: action.payload.type,
 				},
+				isHistoryVisible: false,
 			}
 			localStorage.setItem('state', JSON.stringify(newState))
 			return newState
@@ -43,6 +45,8 @@ const reducers = (state, action) => {
 						{
 							name: action.payload.name,
 							content: action.payload.content,
+							commits: action.payload.commits,
+							path: action.payload.path,
 						},
 					],
 					currentTab:
@@ -69,6 +73,7 @@ const reducers = (state, action) => {
 					),
 				],
 				currentTab: state.currentTab === 0 ? 0 : state.currentTab - 1,
+				isHistoryVisible: false,
 			}
 			localStorage.setItem('state', JSON.stringify(newState))
 			return newState
@@ -77,6 +82,7 @@ const reducers = (state, action) => {
 			const newState = {
 				...state,
 				currentTab: action.payload,
+				isHistoryVisible: false,
 			}
 			localStorage.setItem('state', JSON.stringify(newState))
 			return newState
@@ -88,6 +94,7 @@ const reducers = (state, action) => {
 					state.currentTab === 0
 						? state.currentTab
 						: state.currentTab - 1,
+				isHistoryVisible: false,
 			}
 			localStorage.setItem('state', JSON.stringify(newState))
 			return newState
@@ -99,6 +106,7 @@ const reducers = (state, action) => {
 					state.tabs.length - 1 === state.currentTab
 						? state.currentTab
 						: state.currentTab + 1,
+				isHistoryVisible: false,
 			}
 			localStorage.setItem('state', JSON.stringify(newState))
 			return newState
@@ -117,6 +125,15 @@ const reducers = (state, action) => {
 				tabs: [],
 				currentTab: 0,
 				isTabDropDownVisible: false,
+				isHistoryVisible: false,
+			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'TOGGLE_HISTORY_PANEL': {
+			const newState = {
+				...state,
+				isHistoryVisible: !state.isHistoryVisible,
 			}
 			localStorage.setItem('state', JSON.stringify(newState))
 			return newState
