@@ -6,10 +6,6 @@ import { Context } from '../state/context'
 // Import Tabs Components
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
-import fetchCall from '../utils/fetchCall'
-
-import { GET_FILE_FETCH } from '../queries/getFile'
-
 // Import Icons
 import {
 	CloseIcon,
@@ -24,18 +20,16 @@ const Main = () => {
 
 	React.useEffect(() => {
 		if (state.currentFile.path !== '') {
-			const body = JSON.stringify({
-				query: GET_FILE_FETCH,
-				variables: {
+			let index = state.currentFile.path.lastIndexOf('/') + 1
+			dispatch({
+				type: 'ADD_TAB',
+				payload: {
+					name: state.currentFile.path.slice(index),
 					path: state.currentFile.path,
 				},
 			})
-			fetchCall(body).then(({ data }) => {
-				const { getFile } = data
-				dispatch({ type: 'ADD_TAB', payload: getFile })
-				dispatch({
-					type: 'CLOSE_CURRENT_FILE',
-				})
+			dispatch({
+				type: 'CLOSE_CURRENT_FILE',
 			})
 		}
 	}, [state.currentFile])

@@ -6,19 +6,21 @@ import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
 import History from './History'
 
-import { GET_FILE } from '../../queries/getFile'
+import { GET_FILE, GET_FILE_FETCH } from '../../queries/getFile'
 import UPDATE_FILE from '../../queries/updateFile'
+
+import fetchCall from '../../utils/fetchCall'
+
 import { Context } from '../../state/context'
 
-const Editor = ({ content, commits, path }) => {
+const Editor = ({ path }) => {
 	const monacoRef = useRef()
 	const editorRef = useRef()
 
 	const { state } = React.useContext(Context)
 
-	const [code, setCode] = React.useState(
-		JSON.stringify(JSON.parse(content), null, 4)
-	)
+	const [code, setCode] = React.useState('')
+	const [file, setFile] = React.useState({})
 	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [objectIndex, setObjectIndex] = React.useState(null)
@@ -34,20 +36,18 @@ const Editor = ({ content, commits, path }) => {
 	}, [])
 
 	React.useEffect(() => {
-		const current = JSON.parse(code)
-		if (queryFileData && Object.keys(queryFileData).length > 0) {
-			switch (fileType) {
-				case 'ingredients':
-					current.ingredients[
-						objectIndex
-					].name = `@${queryFileData.getFile.name}`
-					break
-				default:
-					break
-			}
-			setCode(JSON.stringify(current, null, 2))
-		}
-	}, [queryFileData])
+		const body = JSON.stringify({
+			query: GET_FILE_FETCH,
+			variables: {
+				path: path,
+			},
+		})
+		fetchCall(body).then(({ data }) => {
+			const { getFile } = data
+			setCode(JSON.stringify(JSON.parse(getFile.content), null, 2))
+			setFile(getFile)
+		})
+	}, [path])
 
 	const selectFile = async (type, path) => {
 		toggleModal(false)
@@ -136,7 +136,7 @@ const Editor = ({ content, commits, path }) => {
 				editorDidMount={handleEditorDidMount}
 			/>
 			{state.isHistoryVisible && (
-				<History commits={commits} path={path} />
+				<History commits={file.commits} path={path} />
 			)}
 		</div>
 	)

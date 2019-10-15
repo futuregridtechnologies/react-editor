@@ -44,8 +44,6 @@ const reducers = (state, action) => {
 						...state.tabs,
 						{
 							name: action.payload.name,
-							content: action.payload.content,
-							commits: action.payload.commits,
 							path: action.payload.path,
 						},
 					],
