@@ -7,7 +7,7 @@ import GET_EXPLORER_CONTENT from '../queries/getExplorerContent'
 
 import { Context } from '../state/context'
 
-import { FolderClosedIcon, FolderOpenIcon, FileIcon } from '../assets/Icons'
+import { FolderCloseIcon, FolderOpenIcon, FileIcon } from '../assets/Icons'
 
 const RenderTree = () => {
 	const { dispatch } = React.useContext(Context)
@@ -51,9 +51,9 @@ const RenderTree = () => {
 			if (props.type === 'file') {
 				return FileIcon
 			} else if (props.toggled) {
-				return FolderOpenIcon
+				return <FolderOpenIcon />
 			}
-			return FolderClosedIcon
+			return <FolderCloseIcon />
 		},
 		Header: props => {
 			return (
