@@ -17,11 +17,10 @@ const Editor = ({ path }) => {
 	const monacoRef = useRef()
 	const editorRef = useRef()
 
-	const { state } = React.useContext(Context)
+	const { state, dispatch } = React.useContext(Context)
 
 	const [code, setCode] = React.useState('')
 	const [file, setFile] = React.useState({})
-	const [isEditorReady, setEditorState] = React.useState(false)
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [updateFile] = useMutation(UPDATE_FILE)
 
@@ -62,27 +61,19 @@ const Editor = ({ path }) => {
 		const op = {
 			identifier: id,
 			range: range,
-			text: text,
+			text: `@${text}`,
 			forceMoveMarkers: true,
 		}
 		editorRef.current.executeEdits(code, [op])
 	}
 
 	function handleEditorDidMount(_, editor) {
-		setEditorState(!isEditorReady)
 		editorRef.current = editor
-		listenEditorChanges()
 
 		editorRef.current.addCommand(
 			monacoRef.current.KeyMod.Shift | monacoRef.current.KeyCode.KEY_2,
 			() => toggleModal(!isModalVisible)
 		)
-	}
-
-	function listenEditorChanges() {
-		editorRef.current.onDidChangeModelContent(ev => {
-			// console.log(editorRef.current.getValue());
-		})
 	}
 
 	const publish = message => {
@@ -95,6 +86,22 @@ const Editor = ({ path }) => {
 				validatedFor: [],
 			},
 		})
+	}
+
+	const viewCurrentVersion = () => {
+		setCode(state.draft)
+		dispatch({ type: 'REMOVE_VERSION' })
+		dispatch({ type: 'REMOVE_DRAFT' })
+	}
+
+	const selectVersion = (contentVersion, commitVersion) => {
+		if (state.draft === '') {
+			dispatch({
+				type: 'SET_DRAFT',
+				payload: editorRef.current.getValue(),
+			})
+		}
+		setCode(contentVersion)
 	}
 
 	const options = {
@@ -119,7 +126,10 @@ const Editor = ({ path }) => {
 					selectFile={selectFile}
 				/>
 			)}
-			<EditorOptions publish={publish} />
+			<EditorOptions
+				publish={publish}
+				viewCurrentVersion={viewCurrentVersion}
+			/>
 			<MonacoEditor
 				height="100vh"
 				width="calc(100% - 1px)"
@@ -129,8 +139,12 @@ const Editor = ({ path }) => {
 				options={options}
 				editorDidMount={handleEditorDidMount}
 			/>
-			{state.isHistoryVisible && (
-				<History commits={file.commits} path={path} />
+			{state.isHistoryVisible && Object.keys(file).length > 0 && (
+				<History
+					commits={file.commits}
+					path={path}
+					selectVersion={selectVersion}
+				/>
 			)}
 		</div>
 	)

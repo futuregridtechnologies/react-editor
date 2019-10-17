@@ -12,10 +12,45 @@ const initialState = localStorage.getItem('state')
 			currentFile: { path: '', type: '' },
 			isTabDropDownVisible: false,
 			isHistoryVisible: false,
+			draft: '',
+			version: null,
 	  }
 
 const reducers = (state, action) => {
 	switch (action.type) {
+		case 'SET_DRAFT': {
+			const newState = {
+				...state,
+				draft: action.payload,
+			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'REMOVE_DRAFT': {
+			const newState = {
+				...state,
+				draft: '',
+			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'SET_VERSION': {
+			const newState = {
+				...state,
+				version: action.payload,
+			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+		case 'REMOVE_VERSION': {
+			const newState = {
+				...state,
+				version: null,
+			}
+			localStorage.setItem('state', JSON.stringify(newState))
+			return newState
+		}
+
 		case 'CURRENT_FILE': {
 			const newState = {
 				...state,
@@ -72,6 +107,8 @@ const reducers = (state, action) => {
 				],
 				currentTab: state.currentTab === 0 ? 0 : state.currentTab - 1,
 				isHistoryVisible: false,
+				version: null,
+				draft: '',
 			}
 			localStorage.setItem('state', JSON.stringify(newState))
 			return newState

@@ -144,7 +144,7 @@
 #history__panel {
     grid-area: aside;
     overflow-y: auto;
-    height: calc(100vh - 120px);
+    height: calc(100vh - 88px);
     border-left: 1px solid var(--border);
     header {
         padding: var(--spacer-2) var(--spacer-2) 0 var(--spacer-2);

@@ -6,7 +6,7 @@ import { Context } from '../../state/context'
 
 import Modal from '../Modal'
 
-const EditorOptions = ({ publish }) => {
+const EditorOptions = ({ publish, viewCurrentVersion }) => {
 	const { state, dispatch } = React.useContext(Context)
 	const [isModalVisible, setIsModalVisible] = React.useState(false)
 	const [message, setMessage] = React.useState('')
@@ -68,6 +68,22 @@ const EditorOptions = ({ publish }) => {
 					<HistoryIcon color="var(--icon-grey)" />
 				</button>
 			</div>
+			{state.draft !== '' && (
+				<div>
+					<span>
+						Viewing version
+						{new Intl.DateTimeFormat('en-US', {
+							month: 'short',
+							day: 'numeric',
+							hour: 'numeric',
+							minute: 'numeric',
+						}).format(state.version)}
+					</span>
+					<button onClick={() => viewCurrentVersion()}>
+						View Current
+					</button>
+				</div>
+			)}
 			<div id="right" onClick={() => setIsModalVisible(!isModalVisible)}>
 				<button>Publish</button>
 			</div>
