@@ -4,17 +4,21 @@ const Context = React.createContext()
 
 const storedState = localStorage.getItem('state')
 
-const initialState = localStorage.getItem('state')
+const initialState = storedState
 	? JSON.parse(storedState)
 	: {
 			tabs: [],
-			currentTab: 0,
-			currentFile: { path: '', type: '' },
-			isTabDropDownVisible: false,
-			isHistoryVisible: false,
 			draft: '',
 			version: null,
+			currentTab: 0,
+			isHistoryVisible: false,
+			isTabDropDownVisible: false,
 	  }
+
+const storeState = state => {
+	localStorage.setItem('state', JSON.stringify(state))
+	return state
+}
 
 const reducers = (state, action) => {
 	switch (action.type) {
@@ -23,53 +27,28 @@ const reducers = (state, action) => {
 				...state,
 				draft: action.payload,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
 		case 'REMOVE_DRAFT': {
 			const newState = {
 				...state,
 				draft: '',
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
 		case 'SET_VERSION': {
 			const newState = {
 				...state,
 				version: action.payload,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
 		case 'REMOVE_VERSION': {
 			const newState = {
 				...state,
 				version: null,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
-		}
-
-		case 'CURRENT_FILE': {
-			const newState = {
-				...state,
-				currentFile: {
-					path: action.payload.path,
-					type: action.payload.type,
-				},
-				isHistoryVisible: false,
-			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
-		}
-		case 'CLOSE_CURRENT_FILE': {
-			const newState = {
-				...state,
-				currentFile: { path: '', type: '' },
-			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
 		case 'ADD_TAB': {
 			if (!state.tabs.some(tab => tab.path === action.payload.path)) {
@@ -85,8 +64,7 @@ const reducers = (state, action) => {
 					currentTab:
 						state.tabs.length === 0 ? 0 : state.currentTab + 1,
 				}
-				localStorage.setItem('state', JSON.stringify(newState))
-				return newState
+				return storeState(newState)
 			}
 			const newState = {
 				...state,
@@ -94,10 +72,9 @@ const reducers = (state, action) => {
 					tab => tab.name === action.payload.name
 				),
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
-		case 'removeTab': {
+		case 'REMOVE_TAB': {
 			const newState = {
 				...state,
 				tabs: [
@@ -110,19 +87,17 @@ const reducers = (state, action) => {
 				version: null,
 				draft: '',
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
-		case 'setTabIndex': {
+		case 'SET_TAB_INDEX': {
 			const newState = {
 				...state,
 				currentTab: action.payload,
 				isHistoryVisible: false,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
-		case 'leftTab': {
+		case 'LEFT_TAB': {
 			const newState = {
 				...state,
 				currentTab:
@@ -131,10 +106,9 @@ const reducers = (state, action) => {
 						: state.currentTab - 1,
 				isHistoryVisible: false,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
-		case 'rightTab': {
+		case 'RIGHT_TAB': {
 			const newState = {
 				...state,
 				currentTab:
@@ -143,18 +117,16 @@ const reducers = (state, action) => {
 						: state.currentTab + 1,
 				isHistoryVisible: false,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
-		case 'toggleTabDropdown': {
+		case 'TOGGLE_TAB_DROPDOWN': {
 			const newState = {
 				...state,
 				isTabDropDownVisible: action.payload,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
-		case 'closeAllTabs': {
+		case 'CLOSE_ALL_TABS': {
 			const newState = {
 				...state,
 				tabs: [],
@@ -162,16 +134,14 @@ const reducers = (state, action) => {
 				isTabDropDownVisible: false,
 				isHistoryVisible: false,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
 		case 'TOGGLE_HISTORY_PANEL': {
 			const newState = {
 				...state,
 				isHistoryVisible: !state.isHistoryVisible,
 			}
-			localStorage.setItem('state', JSON.stringify(newState))
-			return newState
+			return storeState(newState)
 		}
 		default:
 			return state

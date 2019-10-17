@@ -18,26 +18,6 @@ import {
 const Main = () => {
 	const { state, dispatch } = React.useContext(Context)
 
-	React.useEffect(() => {
-		if (state.currentFile.path !== '') {
-			let index = state.currentFile.path.lastIndexOf('/') + 1
-			dispatch({
-				type: 'ADD_TAB',
-				payload: {
-					name: state.currentFile.path.slice(index),
-					path: state.currentFile.path,
-				},
-			})
-			dispatch({
-				type: 'CLOSE_CURRENT_FILE',
-			})
-		}
-	}, [state.currentFile])
-
-	const closeAllTabs = () => {
-		dispatch({ type: 'closeAllTabs' })
-	}
-
 	if (state.tabs.length === 0) {
 		return <main id="main">Select a file from the explorer.</main>
 	}
@@ -46,7 +26,7 @@ const Main = () => {
 			<Tabs
 				index={state.currentTab}
 				onChange={index =>
-					dispatch({ type: 'setTabIndex', payload: index })
+					dispatch({ type: 'SET_TAB_INDEX', payload: index })
 				}
 			>
 				<TabList>
@@ -61,7 +41,7 @@ const Main = () => {
 								onClick={e => {
 									e.stopPropagation()
 									dispatch({
-										type: 'removeTab',
+										type: 'REMOVE_TAB',
 										payload: index,
 									})
 								}}
@@ -81,16 +61,16 @@ const Main = () => {
 				</TabPanels>
 			</Tabs>
 			<div id="tabs__navigation">
-				<span onClick={() => dispatch({ type: 'leftTab' })}>
+				<span onClick={() => dispatch({ type: 'LEFT_TAB' })}>
 					{CaretLeftIcon}
 				</span>
-				<span onClick={() => dispatch({ type: 'rightTab' })}>
+				<span onClick={() => dispatch({ type: 'RIGHT_TAB' })}>
 					{CaretRightIcon}
 				</span>
 				<span
 					onClick={() =>
 						dispatch({
-							type: 'toggleTabDropdown',
+							type: 'TOGGLE_TAB_DROPDOWN',
 							payload: !state.isTabDropDownVisible,
 						})
 					}
@@ -100,7 +80,11 @@ const Main = () => {
 				{state.isTabDropDownVisible && (
 					<div id="tab__options">
 						<ul>
-							<li onClick={() => closeAllTabs()}>
+							<li
+								onClick={() =>
+									dispatch({ type: 'CLOSE_ALL_TABS' })
+								}
+							>
 								Close All Tabs
 							</li>
 						</ul>

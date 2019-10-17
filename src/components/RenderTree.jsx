@@ -39,9 +39,13 @@ const RenderTree = () => {
 		}
 		setCursor(node)
 		if (node.type === 'file') {
+			let index = node.path.lastIndexOf('/') + 1
 			dispatch({
-				type: 'CURRENT_FILE',
-				payload: { path: node.path, type: node.type },
+				type: 'ADD_TAB',
+				payload: {
+					name: node.path.slice(index),
+					path: node.path,
+				},
 			})
 		}
 		setData(Object.assign({}, data))
