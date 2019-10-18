@@ -8,8 +8,6 @@ const initialState = storedState
 	? JSON.parse(storedState)
 	: {
 			tabs: [],
-			draft: '',
-			version: null,
 			currentTab: 0,
 			isHistoryVisible: false,
 			isTabDropDownVisible: false,
@@ -23,30 +21,50 @@ const storeState = state => {
 const reducers = (state, action) => {
 	switch (action.type) {
 		case 'SET_DRAFT': {
+			const tabs = state.tabs
+			tabs[state.currentTab] = {
+				...tabs[state.currentTab],
+				draft: action.payload.content,
+			}
 			const newState = {
 				...state,
-				draft: action.payload,
+				tabs: tabs,
 			}
 			return storeState(newState)
 		}
 		case 'REMOVE_DRAFT': {
+			const tabs = state.tabs
+			tabs[state.currentTab] = {
+				...tabs[state.currentTab],
+				draft: '',
+			}
 			const newState = {
 				...state,
-				draft: '',
+				tabs: tabs,
 			}
 			return storeState(newState)
 		}
 		case 'SET_VERSION': {
+			const tabs = state.tabs
+			tabs[state.currentTab] = {
+				...tabs[state.currentTab],
+				version: action.payload.version,
+			}
 			const newState = {
 				...state,
-				version: action.payload,
+				tabs: tabs,
 			}
 			return storeState(newState)
 		}
 		case 'REMOVE_VERSION': {
+			const tabs = state.tabs
+			tabs[state.currentTab] = {
+				...tabs[state.currentTab],
+				version: null,
+			}
 			const newState = {
 				...state,
-				version: null,
+				tabs: tabs,
 			}
 			return storeState(newState)
 		}
@@ -59,6 +77,8 @@ const reducers = (state, action) => {
 						{
 							name: action.payload.name,
 							path: action.payload.path,
+							draft: '',
+							version: null,
 						},
 					],
 					currentTab:
@@ -84,8 +104,6 @@ const reducers = (state, action) => {
 				],
 				currentTab: state.currentTab === 0 ? 0 : state.currentTab - 1,
 				isHistoryVisible: false,
-				version: null,
-				draft: '',
 			}
 			return storeState(newState)
 		}

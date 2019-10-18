@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import MonacoEditor, { monaco } from '@monaco-editor/react'
 import { useMutation } from '@apollo/react-hooks'
+import PropTypes from 'prop-types'
 
 import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
@@ -89,16 +90,19 @@ const Editor = ({ path }) => {
 	}
 
 	const viewCurrentVersion = () => {
-		setCode(state.draft)
-		dispatch({ type: 'REMOVE_VERSION' })
-		dispatch({ type: 'REMOVE_DRAFT' })
+		setCode(state.tabs[state.currentTab].draft)
+		dispatch({ type: 'REMOVE_VERSION', payload: path })
+		dispatch({ type: 'REMOVE_DRAFT', payload: path })
 	}
 
-	const selectVersion = (contentVersion, commitVersion) => {
-		if (state.draft === '') {
+	const selectVersion = contentVersion => {
+		if (state.tabs.find(tab => tab.path === path).draft === '') {
 			dispatch({
 				type: 'SET_DRAFT',
-				payload: editorRef.current.getValue(),
+				payload: {
+					content: editorRef.current.getValue(),
+					path: path,
+				},
 			})
 		}
 		setCode(contentVersion)
@@ -161,6 +165,10 @@ const Editor = ({ path }) => {
 			)}
 		</div>
 	)
+}
+
+Editor.propTypes = {
+	path: PropTypes.string,
 }
 
 export default Editor

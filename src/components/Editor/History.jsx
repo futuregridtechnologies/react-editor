@@ -43,7 +43,10 @@ const History = props => {
 		setIndex(index)
 		dispatch({
 			type: 'SET_VERSION',
-			payload: version,
+			payload: {
+				path: props.path,
+				version: version,
+			},
 		})
 	}
 
@@ -87,6 +90,7 @@ const History = props => {
 
 History.propTypes = {
 	commits: PropTypes.array,
+	path: PropTypes.string,
 }
 
 export default History

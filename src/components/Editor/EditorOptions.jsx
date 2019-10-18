@@ -10,6 +10,7 @@ const EditorOptions = ({ publish, viewCurrentVersion }) => {
 	const { state, dispatch } = React.useContext(Context)
 	const [isModalVisible, setIsModalVisible] = React.useState(false)
 	const [message, setMessage] = React.useState('')
+
 	return (
 		<div className="editor__options">
 			{isModalVisible && (
@@ -68,7 +69,7 @@ const EditorOptions = ({ publish, viewCurrentVersion }) => {
 					<HistoryIcon color="var(--icon-grey)" />
 				</button>
 			</div>
-			{state.draft !== '' && (
+			{state.tabs[state.currentTab].version && (
 				<div>
 					<span>
 						Viewing version
@@ -77,7 +78,7 @@ const EditorOptions = ({ publish, viewCurrentVersion }) => {
 							day: 'numeric',
 							hour: 'numeric',
 							minute: 'numeric',
-						}).format(state.version)}
+						}).format(state.tabs[state.currentTab].version)}
 					</span>
 					<button onClick={() => viewCurrentVersion()}>
 						View Current
@@ -93,6 +94,7 @@ const EditorOptions = ({ publish, viewCurrentVersion }) => {
 
 EditorOptions.propTypes = {
 	publish: PropTypes.func,
+	viewCurrentVersion: PropTypes.func,
 }
 
 export default EditorOptions
