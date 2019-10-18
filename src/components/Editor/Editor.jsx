@@ -109,6 +109,19 @@ const Editor = ({ path }) => {
 		fontSize: '16px',
 		wordWrap: true,
 		quickSuggestions: true,
+		autoIndent: true,
+		contextmenu: false,
+		formatOnType: true,
+		highlightActiveIndentGuide: true,
+		quickSuggestionsDelay: 100,
+		renderIndentGuides: true,
+		renderLineHighlight: 'all',
+		roundedSelection: true,
+		scrollBeyondLastColumn: 5,
+		scrollBeyondLastLine: false,
+		selectOnLineNumbers: true,
+		selectionHighlight: true,
+		smoothScrolling: true,
 	}
 
 	return (
