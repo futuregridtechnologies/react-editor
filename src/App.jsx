@@ -4,7 +4,6 @@ import { Context, initialState, reducers } from './state/context'
 
 import Navbar from './sections/Navbar'
 import Main from './sections/Main'
-import Sidebar from './sections/Sidebar'
 
 const App = () => {
 	const [state, dispatch] = React.useReducer(reducers, initialState)
@@ -20,7 +19,6 @@ const App = () => {
 					setNavbarState={setNavbarState}
 				/>
 				<Main />
-				<Sidebar />
 			</div>
 		</Context.Provider>
 	)
