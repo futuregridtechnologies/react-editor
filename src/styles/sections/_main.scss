@@ -159,12 +159,19 @@
         padding:0 var(--spacer-2);
     }
     .commit {
-        height: 48px;
-        @include flex(center, space-between);
-        padding:0 var(--spacer-2);
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        padding:var(--spacer-2);
         border: 1px solid var(--border);
         margin-bottom: calc(var(--base-pt) * 2px);
         border-radius: calc(var(--base-pt) * 0.5px);
+        & > div {
+            @include flex(null, space-between);
+        }
+        & > span {
+            margin-top: auto;
+        }
         &:hover button {
             visibility: visible;
         }
