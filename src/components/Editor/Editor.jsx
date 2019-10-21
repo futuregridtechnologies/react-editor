@@ -45,7 +45,7 @@ const Editor = ({ path }) => {
 		})
 	}, [path])
 
-	const selectFile = async (type, path) => {
+	const selectFile = async path => {
 		toggleModal(false)
 		const position = editorRef.current.getPosition()
 
@@ -57,12 +57,14 @@ const Editor = ({ path }) => {
 		)
 
 		const id = { major: 1, minor: 1 }
-		let index = path.lastIndexOf('/') + 1
-		const text = path.slice(index)
+		const text = {
+			name: path.split('/').pop(),
+			path: path,
+		}
 		const op = {
 			identifier: id,
 			range: range,
-			text: `@${text}`,
+			text: JSON.stringify(text, null, 2),
 			forceMoveMarkers: true,
 		}
 		editorRef.current.executeEdits(code, [op])

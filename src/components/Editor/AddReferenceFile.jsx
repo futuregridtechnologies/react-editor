@@ -11,9 +11,7 @@ const FileSection = ({ title, files, selectFile }) => (
 		{files.map((file, index) => (
 			<div key={index}>
 				<span>{file.split('/').pop()}</span>
-				<button onClick={() => selectFile(title.toLowerCase(), file)}>
-					Add
-				</button>
+				<button onClick={() => selectFile(file)}>Add</button>
 			</div>
 		))}
 	</section>
