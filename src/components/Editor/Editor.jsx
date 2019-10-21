@@ -9,6 +9,7 @@ import History from './History'
 
 import { GET_FILE_FETCH } from '../../queries/getFile'
 import UPDATE_FILE from '../../queries/updateFile'
+import DRAFT_FILE from '../../queries/draftFile'
 
 import fetchCall from '../../utils/fetchCall'
 
@@ -24,6 +25,7 @@ const Editor = ({ path }) => {
 	const [file, setFile] = React.useState({})
 	const [isModalVisible, toggleModal] = React.useState(false)
 	const [updateFile] = useMutation(UPDATE_FILE)
+	const [draftFile] = useMutation(DRAFT_FILE)
 
 	React.useEffect(() => {
 		monaco.init().then(monaco => {
@@ -91,6 +93,16 @@ const Editor = ({ path }) => {
 		})
 	}
 
+	const draft = () => {
+		const code = editorRef.current.getValue()
+		draftFile({
+			variables: {
+				path: path,
+				data: code,
+			},
+		})
+	}
+
 	const viewCurrentVersion = () => {
 		setCode(state.tabs[state.currentTab].draft)
 		dispatch({ type: 'REMOVE_VERSION', payload: path })
@@ -147,6 +159,7 @@ const Editor = ({ path }) => {
 			)}
 			<EditorOptions
 				publish={publish}
+				draft={draft}
 				viewCurrentVersion={viewCurrentVersion}
 			/>
 			<MonacoEditor

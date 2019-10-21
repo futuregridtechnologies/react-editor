@@ -6,21 +6,25 @@ import { Context } from '../../state/context'
 
 import Modal from '../Modal'
 
-const EditorOptions = ({ publish, viewCurrentVersion }) => {
+const EditorOptions = ({ draft, publish, viewCurrentVersion }) => {
 	const { state, dispatch } = React.useContext(Context)
-	const [isModalVisible, setIsModalVisible] = React.useState(false)
+	const [isModalVisible, setIsModalVisible] = React.useState({
+		publish: false,
+		draft: false,
+	})
 	const [message, setMessage] = React.useState('')
 
 	return (
 		<div className="editor__options">
-			{isModalVisible && (
+			{isModalVisible.publish && (
 				<Modal>
 					<Modal.Header>
 						<span>Publish</span>
 						<button
 							onClick={() =>
-								setIsModalVisible(!isModalVisible) ||
-								setMessage('')
+								setIsModalVisible({
+									publish: !isModalVisible.publish,
+								}) || setMessage('')
 							}
 						>
 							x
@@ -39,15 +43,64 @@ const EditorOptions = ({ publish, viewCurrentVersion }) => {
 							onClick={() =>
 								publish(message) ||
 								setMessage('') ||
-								setIsModalVisible(!isModalVisible)
+								setIsModalVisible({
+									publish: !isModalVisible.publish,
+								})
 							}
 						>
 							Confirm
 						</button>
 						<button
 							onClick={() =>
-								setIsModalVisible(!isModalVisible) ||
-								setMessage('')
+								setIsModalVisible({
+									publish: !isModalVisible.publish,
+								}) || setMessage('')
+							}
+						>
+							Cancel
+						</button>
+					</Modal.Footer>
+				</Modal>
+			)}
+			{isModalVisible.draft && (
+				<Modal>
+					<Modal.Header>
+						<span>Draft</span>
+						<button
+							onClick={() =>
+								setIsModalVisible({
+									draft: !isModalVisible.draft,
+								}) || setMessage('')
+							}
+						>
+							x
+						</button>
+					</Modal.Header>
+					<Modal.Body>
+						<label htmlFor="">Message</label>
+						<input
+							type="text"
+							value={message}
+							onChange={e => setMessage(e.target.value)}
+						/>
+					</Modal.Body>
+					<Modal.Footer>
+						<button
+							onClick={() =>
+								draft(message) ||
+								setMessage('') ||
+								setIsModalVisible({
+									draft: !isModalVisible.draft,
+								})
+							}
+						>
+							Confirm
+						</button>
+						<button
+							onClick={() =>
+								setIsModalVisible({
+									draft: !isModalVisible.draft,
+								}) || setMessage('')
 							}
 						>
 							Cancel
@@ -85,8 +138,25 @@ const EditorOptions = ({ publish, viewCurrentVersion }) => {
 					</button>
 				</div>
 			)}
-			<div id="right" onClick={() => setIsModalVisible(!isModalVisible)}>
-				<button>Publish</button>
+			<div id="right">
+				<button
+					onClick={() =>
+						setIsModalVisible({
+							draft: !isModalVisible.draft,
+						})
+					}
+				>
+					Save
+				</button>
+				<button
+					onClick={() =>
+						setIsModalVisible({
+							publish: !isModalVisible.publish,
+						})
+					}
+				>
+					Publish
+				</button>
 			</div>
 		</div>
 	)
