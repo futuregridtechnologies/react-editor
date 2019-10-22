@@ -10,7 +10,7 @@ import { Context } from '../../state/context'
 import fetchCall from '../../utils/fetchCall'
 
 const History = props => {
-	const { dispatch } = React.useContext(Context)
+	const { state, dispatch } = React.useContext(Context)
 	const [index, setIndex] = React.useState(null)
 	const { loading, data: commits } = useQuery(GET_COMMITS, {
 		variables: {
@@ -63,6 +63,22 @@ const History = props => {
 		<div id="history__panel">
 			<header>
 				<h3>History</h3>
+				{state.tabs[state.currentTab].version && (
+					<div>
+						<span>
+							Viewing version
+							{new Intl.DateTimeFormat('en-US', {
+								month: 'short',
+								day: 'numeric',
+								hour: 'numeric',
+								minute: 'numeric',
+							}).format(state.tabs[state.currentTab].version)}
+						</span>
+						<button onClick={() => props.viewCurrentVersion()}>
+							View Current
+						</button>
+					</div>
+				)}
 			</header>
 			<main>
 				{commits.getCommits.map((commit, index) => (

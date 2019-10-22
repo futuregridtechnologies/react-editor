@@ -68,6 +68,18 @@ const reducers = (state, action) => {
 			}
 			return storeState(newState)
 		}
+		case 'UPDATE_LAST_SAVED': {
+			const tabs = state.tabs
+			tabs[state.currentTab] = {
+				...tabs[state.currentTab],
+				lastSaved: Date.now(),
+			}
+			const newState = {
+				...state,
+				tabs: tabs,
+			}
+			return storeState(newState)
+		}
 		case 'ADD_TAB': {
 			if (!state.tabs.some(tab => tab.path === action.payload.path)) {
 				const newState = {
@@ -79,6 +91,7 @@ const reducers = (state, action) => {
 							path: action.payload.path,
 							draft: '',
 							version: null,
+							lastSaved: '',
 						},
 					],
 					currentTab:

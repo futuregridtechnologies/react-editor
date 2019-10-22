@@ -95,6 +95,7 @@ const Editor = ({ path }) => {
 
 	const draft = () => {
 		const code = editorRef.current.getValue()
+		dispatch({ type: 'UPDATE_LAST_SAVED' })
 		draftFile({
 			variables: {
 				path: path,
@@ -160,7 +161,7 @@ const Editor = ({ path }) => {
 			<EditorOptions
 				publish={publish}
 				draft={draft}
-				viewCurrentVersion={viewCurrentVersion}
+				lastSaved={file.lastSaved}
 			/>
 			<MonacoEditor
 				height="100vh"
@@ -176,6 +177,7 @@ const Editor = ({ path }) => {
 					commits={file.commits}
 					path={path}
 					selectVersion={selectVersion}
+					viewCurrentVersion={viewCurrentVersion}
 				/>
 			)}
 		</div>

@@ -7,6 +7,7 @@ const GET_FILE = gql`
 			name
 			createdAt
 			content
+			lastSaved
 			commits
 		}
 	}
@@ -21,6 +22,7 @@ const GET_FILE_FETCH = `
 			content
 			commits
 			path
+			lastSaved
 		}
 	}
 `

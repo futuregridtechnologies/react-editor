@@ -6,25 +6,21 @@ import { Context } from '../../state/context'
 
 import Modal from '../Modal'
 
-const EditorOptions = ({ draft, publish, viewCurrentVersion }) => {
+const EditorOptions = ({ lastSaved, draft, publish }) => {
 	const { state, dispatch } = React.useContext(Context)
-	const [isModalVisible, setIsModalVisible] = React.useState({
-		publish: false,
-		draft: false,
-	})
+	const [isModalVisible, setIsModalVisible] = React.useState()
 	const [message, setMessage] = React.useState('')
 
 	return (
 		<div className="editor__options">
-			{isModalVisible.publish && (
+			{isModalVisible && (
 				<Modal>
 					<Modal.Header>
 						<span>Publish</span>
 						<button
 							onClick={() =>
-								setIsModalVisible({
-									publish: !isModalVisible.publish,
-								}) || setMessage('')
+								setIsModalVisible(!isModalVisible) ||
+								setMessage('')
 							}
 						>
 							x
@@ -41,9 +37,7 @@ const EditorOptions = ({ draft, publish, viewCurrentVersion }) => {
 					<Modal.Footer>
 						<button
 							onClick={() =>
-								setIsModalVisible({
-									publish: !isModalVisible.publish,
-								}) ||
+								setIsModalVisible(!isModalVisible) ||
 								setMessage('') ||
 								publish(message)
 							}
@@ -52,55 +46,8 @@ const EditorOptions = ({ draft, publish, viewCurrentVersion }) => {
 						</button>
 						<button
 							onClick={() =>
-								setIsModalVisible({
-									publish: !isModalVisible.publish,
-								}) || setMessage('')
-							}
-						>
-							Cancel
-						</button>
-					</Modal.Footer>
-				</Modal>
-			)}
-			{isModalVisible.draft && (
-				<Modal>
-					<Modal.Header>
-						<span>Draft</span>
-						<button
-							onClick={() =>
-								setIsModalVisible({
-									draft: !isModalVisible.draft,
-								}) || setMessage('')
-							}
-						>
-							x
-						</button>
-					</Modal.Header>
-					<Modal.Body>
-						<label htmlFor="">Message</label>
-						<input
-							type="text"
-							value={message}
-							onChange={e => setMessage(e.target.value)}
-						/>
-					</Modal.Body>
-					<Modal.Footer>
-						<button
-							onClick={() =>
-								draft(message) ||
-								setMessage('') ||
-								setIsModalVisible({
-									draft: !isModalVisible.draft,
-								})
-							}
-						>
-							Confirm
-						</button>
-						<button
-							onClick={() =>
-								setIsModalVisible({
-									draft: !isModalVisible.draft,
-								}) || setMessage('')
+								setIsModalVisible(!isModalVisible) ||
+								setMessage('')
 							}
 						>
 							Cancel
@@ -122,39 +69,26 @@ const EditorOptions = ({ draft, publish, viewCurrentVersion }) => {
 					<HistoryIcon color="var(--icon-grey)" />
 				</button>
 			</div>
-			{state.tabs[state.currentTab].version && (
+			{lastSaved && (
 				<div>
 					<span>
-						Viewing version
+						Last Saved -{' '}
 						{new Intl.DateTimeFormat('en-US', {
 							month: 'short',
 							day: 'numeric',
 							hour: 'numeric',
 							minute: 'numeric',
-						}).format(state.tabs[state.currentTab].version)}
+						}).format(
+							state.tabs[state.currentTab].lastSaved !== ''
+								? state.tabs[state.currentTab].lastSaved
+								: lastSaved
+						)}
 					</span>
-					<button onClick={() => viewCurrentVersion()}>
-						View Current
-					</button>
 				</div>
 			)}
 			<div id="right">
-				<button
-					onClick={() =>
-						setIsModalVisible({
-							draft: !isModalVisible.draft,
-						})
-					}
-				>
-					Save
-				</button>
-				<button
-					onClick={() =>
-						setIsModalVisible({
-							publish: !isModalVisible.publish,
-						})
-					}
-				>
+				<button onClick={() => draft()}>Save</button>
+				<button onClick={() => setIsModalVisible(!isModalVisible)}>
 					Publish
 				</button>
 			</div>
