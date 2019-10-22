@@ -41,11 +41,11 @@ const EditorOptions = ({ draft, publish, viewCurrentVersion }) => {
 					<Modal.Footer>
 						<button
 							onClick={() =>
-								publish(message) ||
-								setMessage('') ||
 								setIsModalVisible({
 									publish: !isModalVisible.publish,
-								})
+								}) ||
+								setMessage('') ||
+								publish(message)
 							}
 						>
 							Confirm
