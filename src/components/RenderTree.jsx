@@ -1,6 +1,7 @@
 import React from 'react'
 import { Treebeard } from 'react-treebeard'
 import { useQuery } from '@apollo/react-hooks'
+import mime from 'mime-types'
 
 // Queries
 import GET_EXPLORER_CONTENT from '../queries/getExplorerContent'
@@ -38,7 +39,10 @@ const RenderTree = () => {
 			node.toggled = toggled
 		}
 		setCursor(node)
-		if (node.type === 'file') {
+		if (
+			node.type === 'file' &&
+			mime.lookup(node.name) === 'application/json'
+		) {
 			let index = node.path.lastIndexOf('/') + 1
 			dispatch({
 				type: 'ADD_TAB',
