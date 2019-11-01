@@ -36,6 +36,7 @@ const History = props => {
 				return props.selectVersion(getCommitContent)
 			})
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [index])
 
 	const selectCommit = index => {

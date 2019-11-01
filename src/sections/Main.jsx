@@ -1,6 +1,8 @@
 import React from 'react'
 import Editor from '../components/Editor/Editor'
 
+import { useSubscription } from '@apollo/react-hooks'
+
 import { Context } from '../state/context'
 
 // Import Tabs Components
@@ -15,8 +17,25 @@ import {
 	CaretUpIcon,
 } from '../assets/Icons'
 
+import OPEN_FILE_SUB from '../queries/openFile'
+
 const Main = () => {
 	const { state, dispatch } = React.useContext(Context)
+
+	const { data } = useSubscription(OPEN_FILE_SUB)
+
+	React.useEffect(() => {
+		if (data && data.openFileSub) {
+			dispatch({
+				type: 'ADD_TAB',
+				payload: {
+					name: data.openFileSub.path.split('/').pop(),
+					path: data.openFileSub.path,
+				},
+			})
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data])
 
 	if (state.tabs.length === 0) {
 		return <main id="main">Select a file from the explorer.</main>
