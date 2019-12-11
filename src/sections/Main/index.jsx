@@ -49,7 +49,7 @@ const Main = () => {
         )
     }
     return (
-        <MainWrapper id="main">
+        <MainWrapper id="main" isSidebarVisible={state.isSidebarVisible}>
             <Tabs
                 index={state.currentTab}
                 onChange={index =>

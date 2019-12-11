@@ -7,6 +7,7 @@ const initialState = storedState
           currentTab: 0,
           isHistoryVisible: false,
           isTabDropDownVisible: false,
+          isSidebarVisible: false,
       }
 
 const storeState = state => {

@@ -1,5 +1,5 @@
 import Editor from './Editor'
 import Modal from './Modal'
-import RenderTree from './RenderTree'
+import FileExplorer from './FileExplorer'
 
-export { Editor, Modal, RenderTree }
+export { Editor, Modal, FileExplorer }

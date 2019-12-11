@@ -1,28 +1,30 @@
 import React from 'react'
 
+// State
+import { Context } from '../../state'
+
 // Components
-import { RenderTree } from '../../components'
+import { FileExplorer } from '../../components'
 
 // Styles
-import { SidebarWrapper, SidebarActions, Header, FileExplorer } from './styles'
+import { SidebarWrapper, SidebarActions, Header } from './styles'
 
 // Assets
-import { CollapseLeftIcon, ExpandRightIcon } from '../../assets/Icons'
+import { ExpandIcon, CollapseIcon } from '../../assets/Icons'
 
-const Sidebar = ({ isSidebarCollapsed, setSidebarState }) => {
+const Sidebar = () => {
+    const { state, dispatch } = React.useContext(Context)
     return (
         <SidebarWrapper id="sidebar">
             <Header id="sidebar__header">
                 <SidebarActions
                     id="sidebar__header__collapse"
-                    onClick={() => setSidebarState(!isSidebarCollapsed)}
+                    onClick={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
                 >
-                    {isSidebarCollapsed ? ExpandRightIcon : CollapseLeftIcon}
+                    {state.isSidebarVisible ? <ExpandIcon /> : <CollapseIcon />}
                 </SidebarActions>
             </Header>
-            <FileExplorer id="sidebar__explorer">
-                <RenderTree />
-            </FileExplorer>
+            <FileExplorer id="sidebar__explorer" />
         </SidebarWrapper>
     )
 }

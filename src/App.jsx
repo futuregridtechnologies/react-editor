@@ -12,17 +12,10 @@ import { Wrapper } from './styles'
 
 const App = () => {
     const [state, dispatch] = React.useReducer(reducers, initialState)
-    const [isSidebarCollapsed, setSidebarState] = React.useState(false)
     return (
         <Context.Provider value={{ state, dispatch }}>
-            <Wrapper
-                id="wrapper"
-                className={`${isSidebarCollapsed ? 'sidebar__collapsed' : ''}`}
-            >
-                <Sidebar
-                    isSidebarCollapsed={isSidebarCollapsed}
-                    setSidebarState={setSidebarState}
-                />
+            <Wrapper isSidebarVisible={state.isSidebarVisible}>
+                <Sidebar />
                 <Main />
             </Wrapper>
         </Context.Provider>

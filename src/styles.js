@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { css, createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
     :root {
@@ -13,33 +13,22 @@ export const GlobalStyle = createGlobalStyle`
         --spacer-4: calc(var(--base-pt) * 4px);
     }
     * {
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
+        box-sizing: border-box;
+        font-family: sans-serif;
     }
 
     body {
         overflow: hidden;
+        font-family: sans-serif;
     }
 `
 
-export const Wrapper = styled.div`
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    grid-template-areas: 'sidebar main';
-    width: 100vw;
-    height: 100vh;
-    &.sidebar__collapsed {
-        grid-template-columns: 40px 1fr;
-        #sidebar__header__nav,
-        #sidebar__explorer {
-            display: none;
-        }
-        #main {
-            width: calc(100vw - 40px);
-            [data-reach-tab-list],
-            [data-reach-tab-panels] {
-                width: calc(100vw - 40px);
-            }
-        }
-    }
-`
+export const Wrapper = styled.div(
+    ({ isSidebarVisible }) => css`
+        display: grid;
+        grid-template-columns: ${isSidebarVisible ? '240px 1fr' : '40px 1fr'};
+        grid-template-areas: 'sidebar main';
+        width: 100vw;
+        height: 100vh;
+    `
+)
