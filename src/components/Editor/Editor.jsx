@@ -7,9 +7,7 @@ import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
 import History from './History'
 
-import { GET_FILE_FETCH } from '../../queries/getFile'
-import UPDATE_FILE from '../../queries/updateFile'
-import DRAFT_FILE from '../../queries/draftFile'
+import { GET_FILE_FETCH, UPDATE_FILE, DRAFT_FILE } from '../../queries'
 
 import fetchCall from '../../utils/fetchCall'
 
