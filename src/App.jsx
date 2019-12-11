@@ -4,21 +4,21 @@ import React from 'react'
 import { Context, initialState, reducers } from './state'
 
 // Sections
-import Navbar from './sections/Navbar'
+import Sidebar from './sections/Sidebar'
 import Main from './sections/Main'
 
 const App = () => {
     const [state, dispatch] = React.useReducer(reducers, initialState)
-    const [isNavbarCollapsed, setNavbarState] = React.useState(false)
+    const [isSidebarCollapsed, setSidebarState] = React.useState(false)
     return (
         <Context.Provider value={{ state, dispatch }}>
             <div
                 id="wrapper"
-                className={`${isNavbarCollapsed ? 'navbar__collapsed' : ''}`}
+                className={`${isSidebarCollapsed ? 'sidebar__collapsed' : ''}`}
             >
-                <Navbar
-                    isNavbarCollapsed={isNavbarCollapsed}
-                    setNavbarState={setNavbarState}
+                <Sidebar
+                    isSidebarCollapsed={isSidebarCollapsed}
+                    setSidebarState={setSidebarState}
                 />
                 <Main />
             </div>
