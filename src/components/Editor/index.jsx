@@ -3,15 +3,19 @@ import MonacoEditor, { monaco } from '@monaco-editor/react'
 import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 
+// State
+import { Context } from '../../state'
+
+// Components
 import AddReferenceFile from './AddReferenceFile'
 import EditorOptions from './EditorOptions'
 import History from './History'
 
+// Queries
 import { GET_FILE_FETCH, UPDATE_FILE, DRAFT_FILE } from '../../queries'
 
+// Helpers
 import fetchCall from '../../utils/fetchCall'
-
-import { Context } from '../../state/context'
 
 const Editor = ({ path }) => {
     const monacoRef = useRef()

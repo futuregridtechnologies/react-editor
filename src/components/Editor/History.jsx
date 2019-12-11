@@ -2,10 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 
+// State
+import { Context } from '../../state'
+
+// Queries
 import { GET_COMMITS, GET_COMMIT_CONTENT } from '../../queries'
 
-import { Context } from '../../state/context'
-
+// Helpers
 import fetchCall from '../../utils/fetchCall'
 
 const History = props => {

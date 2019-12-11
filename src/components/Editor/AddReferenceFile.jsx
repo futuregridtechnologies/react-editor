@@ -1,8 +1,10 @@
 import React from 'react'
 import { useLazyQuery } from '@apollo/react-hooks'
 
+// Components
 import Modal from '../Modal'
 
+// Queries
 import { SEARCH_FILES } from '../../queries'
 
 const FileSection = ({ title, files, selectFile }) => (

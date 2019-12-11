@@ -3,11 +3,13 @@ import { Treebeard } from 'react-treebeard'
 import { useQuery } from '@apollo/react-hooks'
 import mime from 'mime-types'
 
+// State
+import { Context } from '../state'
+
 // Queries
 import { GET_EXPLORER_CONTENT } from '../queries'
 
-import { Context } from '../state/context'
-
+// Assets
 import { FolderCloseIcon, FolderOpenIcon, FileIcon } from '../assets/Icons'
 
 const RenderTree = () => {

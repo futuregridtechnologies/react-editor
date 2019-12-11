@@ -1,14 +1,17 @@
 import React from 'react'
-import Editor from '../components/Editor/Editor'
-
 import { useSubscription } from '@apollo/react-hooks'
-
-import { Context } from '../state/context'
-
-// Import Tabs Components
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
-// Import Icons
+// State
+import { Context } from '../state'
+
+// Components
+import { Editor } from '../components/'
+
+// Queries
+import { OPEN_FILE } from '../queries'
+
+// Assets
 import {
     CloseIcon,
     CaretLeftIcon,
@@ -16,8 +19,6 @@ import {
     CaretDownIcon,
     CaretUpIcon,
 } from '../assets/Icons'
-
-import { OPEN_FILE } from '../queries'
 
 const Main = () => {
     const { state, dispatch } = React.useContext(Context)
