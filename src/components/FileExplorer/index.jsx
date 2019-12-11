@@ -29,14 +29,18 @@ const FileExplorer = () => {
     })
 
     React.useEffect(() => {
-        if (queryData && queryData.getFolderWithFiles) {
-            setData(queryData.getFolderWithFiles.children)
-            dispatch({
-                type: 'SET_CURRENT_FOLDER',
-                payload: queryData.getFolderWithFiles.path,
+        const { getFolderWithFiles: files } = queryData || {}
+        if (files) {
+            const apps = files.children
+            const parsedData = apps.map(app => {
+                const data = app.children[0]
+                return {
+                    ...app,
+                    children: data.children,
+                }
             })
+            setData(parsedData)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [queryData])
 
     const onToggle = node => {
