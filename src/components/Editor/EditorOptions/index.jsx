@@ -18,7 +18,7 @@ const EditorOptions = ({ lastSaved, draft, publish }) => {
     const [message, setMessage] = React.useState('')
 
     return (
-        <EditorOptionsWrapper className="editor__options">
+        <EditorOptionsWrapper>
             {isModalVisible && (
                 <Modal>
                     <Modal.Header>

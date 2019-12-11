@@ -35,7 +35,7 @@ const ReferenceFile = ({ title, toggleModal, selectFile }) => {
 
     const onModalClose = () => toggleModal(false)
     return (
-        <StyledModal addClass="add__reference__file">
+        <StyledModal>
             <Modal.Header>
                 <span>{title}</span>
                 <button onClick={() => onModalClose()}>x</button>

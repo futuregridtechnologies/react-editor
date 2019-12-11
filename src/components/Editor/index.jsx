@@ -148,13 +148,7 @@ const Editor = ({ path }) => {
     }
 
     return (
-        <EditorWrapper
-            className={
-                state.isHistoryVisible
-                    ? 'editor__wrapper withHistory'
-                    : 'editor__wrapper'
-            }
-        >
+        <EditorWrapper isHistoryVisible={state.isHistoryVisible}>
             {isModalVisible && (
                 <ReferenceFile
                     title="Add File"

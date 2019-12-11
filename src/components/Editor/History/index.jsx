@@ -9,7 +9,7 @@ import { Context } from '../../../state'
 import { GET_COMMITS, GET_COMMIT_CONTENT } from '../../../queries'
 
 // Styles
-import { HistoryPanel } from './styles'
+import { HistoryPanel, Commit } from './styles'
 
 // Helpers
 import fetchCall from '../../../utils/fetchCall'
@@ -58,7 +58,7 @@ const History = props => {
 
     if (loading)
         return (
-            <HistoryPanel id="history__panel">
+            <HistoryPanel>
                 <header>
                     <h3>History</h3>
                 </header>
@@ -66,7 +66,7 @@ const History = props => {
             </HistoryPanel>
         )
     return (
-        <HistoryPanel id="history__panel">
+        <HistoryPanel>
             <header>
                 <h3>History</h3>
                 {state.tabs[state.currentTab].version && (
@@ -88,7 +88,7 @@ const History = props => {
             </header>
             <main>
                 {commits.getCommits.map((commit, index) => (
-                    <div className="commit" key={index}>
+                    <Commit key={index}>
                         <div>
                             <span>{commit.message}</span>
                             <button onClick={() => selectCommit(index)}>
@@ -103,7 +103,7 @@ const History = props => {
                                 minute: 'numeric',
                             }).format(commit.committer.timestamp * 1000)}
                         </span>
-                    </div>
+                    </Commit>
                 ))}
             </main>
         </HistoryPanel>

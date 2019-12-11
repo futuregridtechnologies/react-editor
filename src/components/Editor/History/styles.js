@@ -17,32 +17,33 @@ export const HistoryPanel = styled.div`
     main {
         padding: 0 var(--spacer-2);
     }
-    .commit {
-        height: 100px;
+`
+
+export const Commit = styled.div`
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacer-2);
+    border: 1px solid var(--border);
+    margin-bottom: calc(var(--base-pt) * 2px);
+    border-radius: calc(var(--base-pt) * 0.5px);
+    & > div {
         display: flex;
-        flex-direction: column;
-        padding: var(--spacer-2);
-        border: 1px solid var(--border);
-        margin-bottom: calc(var(--base-pt) * 2px);
+        justify-content: space-between;
+    }
+    & > span {
+        margin-top: auto;
+    }
+    &:hover button {
+        visibility: visible;
+    }
+    button {
+        height: 24px;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        background: grey;
+        visibility: hidden;
         border-radius: calc(var(--base-pt) * 0.5px);
-        & > div {
-            display: flex;
-            justify-content: space-between;
-        }
-        & > span {
-            margin-top: auto;
-        }
-        &:hover button {
-            visibility: visible;
-        }
-        button {
-            height: 24px;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            background: grey;
-            visibility: hidden;
-            border-radius: calc(var(--base-pt) * 0.5px);
-        }
     }
 `

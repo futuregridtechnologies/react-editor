@@ -57,7 +57,7 @@ const Main = () => {
         )
     }
     return (
-        <MainWrapper id="main" isSidebarVisible={state.isSidebarVisible}>
+        <MainWrapper isSidebarVisible={state.isSidebarVisible}>
             <StyledTabs
                 index={state.currentTab}
                 onChange={index =>
