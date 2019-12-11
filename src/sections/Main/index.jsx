@@ -3,13 +3,16 @@ import { useSubscription } from '@apollo/react-hooks'
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
 // State
-import { Context } from '../state'
+import { Context } from '../../state'
 
 // Components
-import { Editor } from '../components/'
+import { Editor } from '../../components'
+
+// Styles
+import { MainWrapper } from './styles'
 
 // Queries
-import { OPEN_FILE } from '../queries'
+import { OPEN_FILE } from '../../queries'
 
 // Assets
 import {
@@ -18,7 +21,7 @@ import {
     CaretRightIcon,
     CaretDownIcon,
     CaretUpIcon,
-} from '../assets/Icons'
+} from '../../assets/Icons'
 
 const Main = () => {
     const { state, dispatch } = React.useContext(Context)
@@ -39,10 +42,14 @@ const Main = () => {
     }, [data])
 
     if (state.tabs.length === 0) {
-        return <main id="main">Select a file from the explorer.</main>
+        return (
+            <MainWrapper id="main">
+                Select a file from the explorer.
+            </MainWrapper>
+        )
     }
     return (
-        <main id="main">
+        <MainWrapper id="main">
             <Tabs
                 index={state.currentTab}
                 onChange={index =>
@@ -111,7 +118,7 @@ const Main = () => {
                     </div>
                 )}
             </div>
-        </main>
+        </MainWrapper>
     )
 }
 

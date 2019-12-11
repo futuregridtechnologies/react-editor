@@ -3,13 +3,16 @@ import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 
 // State
-import { Context } from '../../state'
+import { Context } from '../../../state'
 
 // Queries
-import { GET_COMMITS, GET_COMMIT_CONTENT } from '../../queries'
+import { GET_COMMITS, GET_COMMIT_CONTENT } from '../../../queries'
+
+// Styles
+import { HistoryPanel } from './styles'
 
 // Helpers
-import fetchCall from '../../utils/fetchCall'
+import fetchCall from '../../../utils/fetchCall'
 
 const History = props => {
     const { state, dispatch } = React.useContext(Context)
@@ -55,15 +58,15 @@ const History = props => {
 
     if (loading)
         return (
-            <div id="history__panel">
+            <HistoryPanel id="history__panel">
                 <header>
                     <h3>History</h3>
                 </header>
                 <main>Loading</main>
-            </div>
+            </HistoryPanel>
         )
     return (
-        <div id="history__panel">
+        <HistoryPanel id="history__panel">
             <header>
                 <h3>History</h3>
                 {state.tabs[state.currentTab].version && (
@@ -103,7 +106,7 @@ const History = props => {
                     </div>
                 ))}
             </main>
-        </div>
+        </HistoryPanel>
     )
 }
 

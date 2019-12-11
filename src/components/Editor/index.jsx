@@ -7,12 +7,15 @@ import PropTypes from 'prop-types'
 import { Context } from '../../state'
 
 // Components
-import AddReferenceFile from './AddReferenceFile'
+import ReferenceFile from './ReferenceFile'
 import EditorOptions from './EditorOptions'
 import History from './History'
 
 // Queries
 import { GET_FILE_FETCH, UPDATE_FILE, DRAFT_FILE } from '../../queries'
+
+// Styles
+import { EditorWrapper } from './styles'
 
 // Helpers
 import fetchCall from '../../utils/fetchCall'
@@ -145,7 +148,7 @@ const Editor = ({ path }) => {
     }
 
     return (
-        <div
+        <EditorWrapper
             className={
                 state.isHistoryVisible
                     ? 'editor__wrapper withHistory'
@@ -153,7 +156,7 @@ const Editor = ({ path }) => {
             }
         >
             {isModalVisible && (
-                <AddReferenceFile
+                <ReferenceFile
                     title="Add File"
                     toggleModal={toggleModal}
                     selectFile={selectFile}
@@ -181,7 +184,7 @@ const Editor = ({ path }) => {
                     viewCurrentVersion={viewCurrentVersion}
                 />
             )}
-        </div>
+        </EditorWrapper>
     )
 }
 

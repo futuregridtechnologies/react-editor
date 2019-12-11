@@ -2,13 +2,16 @@ import React from 'react'
 import { useLazyQuery } from '@apollo/react-hooks'
 
 // Components
-import Modal from '../Modal'
+import Modal from '../../Modal'
+
+// Styles
+import { StyledFileSection, StyledModal } from './styles'
 
 // Queries
-import { SEARCH_FILES } from '../../queries'
+import { SEARCH_FILES } from '../../../queries'
 
 const FileSection = ({ title, files, selectFile }) => (
-    <section>
+    <StyledFileSection>
         <h2>{title}</h2>
         {files.map((file, index) => (
             <div key={index}>
@@ -16,10 +19,10 @@ const FileSection = ({ title, files, selectFile }) => (
                 <button onClick={() => selectFile(file)}>Add</button>
             </div>
         ))}
-    </section>
+    </StyledFileSection>
 )
 
-const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
+const ReferenceFile = ({ title, toggleModal, selectFile }) => {
     const [search, setSearch] = React.useState('')
     const [searchResult, setSearchResult] = React.useState({})
     const [searchFiles, { data: queryFilesData }] = useLazyQuery(SEARCH_FILES)
@@ -32,7 +35,7 @@ const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
 
     const onModalClose = () => toggleModal(false)
     return (
-        <Modal addClass="add__reference__file">
+        <StyledModal addClass="add__reference__file">
             <Modal.Header>
                 <span>{title}</span>
                 <button onClick={() => onModalClose()}>x</button>
@@ -67,8 +70,8 @@ const AddReferenceFile = ({ title, toggleModal, selectFile }) => {
             <Modal.Footer>
                 <button onClick={() => onModalClose()}>Cancel</button>
             </Modal.Footer>
-        </Modal>
+        </StyledModal>
     )
 }
 
-export default AddReferenceFile
+export default ReferenceFile

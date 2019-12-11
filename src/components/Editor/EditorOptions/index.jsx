@@ -2,13 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // State
-import { Context } from '../../state'
-
-// Assets
-import { HistoryIcon } from '../../assets/Icons'
+import { Context } from '../../../state'
 
 // Components
-import Modal from '../Modal'
+import Modal from '../../Modal'
+
+import { EditorOptionsWrapper } from './styles'
+
+// Assets
+import { HistoryIcon } from '../../../assets/Icons'
 
 const EditorOptions = ({ lastSaved, draft, publish }) => {
     const { state, dispatch } = React.useContext(Context)
@@ -16,7 +18,7 @@ const EditorOptions = ({ lastSaved, draft, publish }) => {
     const [message, setMessage] = React.useState('')
 
     return (
-        <div className="editor__options">
+        <EditorOptionsWrapper className="editor__options">
             {isModalVisible && (
                 <Modal>
                     <Modal.Header>
@@ -96,7 +98,7 @@ const EditorOptions = ({ lastSaved, draft, publish }) => {
                     Publish
                 </button>
             </div>
-        </div>
+        </EditorOptionsWrapper>
     )
 }
 

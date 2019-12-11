@@ -14,39 +14,40 @@ import { getMainDefinition } from 'apollo-utilities'
 import App from './App'
 
 // Styles
-import './styles/index.scss'
+import { GlobalStyle } from './styles'
 
 const cache = new InMemoryCache()
 
 const httpLink = new HttpLink({
-	uri: process.env.REACT_APP_GRAPHQL_URI,
+    uri: process.env.REACT_APP_GRAPHQL_URI,
 })
 
 const wsLink = new WebSocketLink({
-	uri: process.env.REACT_APP_GRAPHQL_SUB_URI,
-	options: {
-		reconnect: true,
-		lazy: true,
-	},
+    uri: process.env.REACT_APP_GRAPHQL_SUB_URI,
+    options: {
+        reconnect: true,
+        lazy: true,
+    },
 })
 
 const client = new ApolloClient({
-	link: split(
-		({ query }) => {
-			const { kind, operation } = getMainDefinition(query)
-			return (
-				kind === 'OperationDefinition' && operation === 'subscription'
-			)
-		},
-		wsLink,
-		httpLink
-	),
-	cache,
+    link: split(
+        ({ query }) => {
+            const { kind, operation } = getMainDefinition(query)
+            return (
+                kind === 'OperationDefinition' && operation === 'subscription'
+            )
+        },
+        wsLink,
+        httpLink
+    ),
+    cache,
 })
 
 ReactDOM.render(
-	<ApolloProvider client={client}>
-		<App />
-	</ApolloProvider>,
-	document.getElementById('root')
+    <ApolloProvider client={client}>
+        <GlobalStyle />
+        <App />
+    </ApolloProvider>,
+    document.getElementById('root')
 )
