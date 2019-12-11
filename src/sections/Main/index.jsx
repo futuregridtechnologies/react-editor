@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSubscription } from '@apollo/react-hooks'
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
+import { TabPanels } from '@reach/tabs'
 
 // State
 import { Context } from '../../state'
@@ -9,7 +9,15 @@ import { Context } from '../../state'
 import { Editor } from '../../components'
 
 // Styles
-import { MainWrapper } from './styles'
+import {
+    MainWrapper,
+    TabsNav,
+    TabOptions,
+    StyledTabs,
+    StyledTabList,
+    StyledTab,
+    StyledTabPanel,
+} from './styles'
 
 // Queries
 import { OPEN_FILE } from '../../queries'
@@ -50,15 +58,15 @@ const Main = () => {
     }
     return (
         <MainWrapper id="main" isSidebarVisible={state.isSidebarVisible}>
-            <Tabs
+            <StyledTabs
                 index={state.currentTab}
                 onChange={index =>
                     dispatch({ type: 'SET_TAB_INDEX', payload: index })
                 }
             >
-                <TabList>
+                <StyledTabList>
                     {state.tabs.map((tab, index) => (
-                        <Tab key={index}>
+                        <StyledTab key={index}>
                             <span title={tab.name}>{`${
                                 tab.name.length > 12
                                     ? `${tab.name.slice(0, 10)}...`
@@ -75,19 +83,19 @@ const Main = () => {
                             >
                                 {CloseIcon}
                             </span>
-                        </Tab>
+                        </StyledTab>
                     ))}
-                </TabList>
+                </StyledTabList>
 
                 <TabPanels>
                     {state.tabs.map((tab, index) => (
-                        <TabPanel key={index}>
+                        <StyledTabPanel key={index}>
                             <Editor {...tab} />
-                        </TabPanel>
+                        </StyledTabPanel>
                     ))}
                 </TabPanels>
-            </Tabs>
-            <div id="tabs__navigation">
+            </StyledTabs>
+            <TabsNav>
                 <span onClick={() => dispatch({ type: 'LEFT_TAB' })}>
                     {CaretLeftIcon}
                 </span>
@@ -105,7 +113,7 @@ const Main = () => {
                     {state.isTabDropDownVisible ? CaretUpIcon : CaretDownIcon}
                 </span>
                 {state.isTabDropDownVisible && (
-                    <div id="tab__options">
+                    <TabOptions>
                         <ul>
                             <li
                                 onClick={() =>
@@ -115,9 +123,9 @@ const Main = () => {
                                 Close All Tabs
                             </li>
                         </ul>
-                    </div>
+                    </TabOptions>
                 )}
-            </div>
+            </TabsNav>
         </MainWrapper>
     )
 }
