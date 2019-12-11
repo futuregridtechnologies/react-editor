@@ -1,27 +1,12 @@
 import React from 'react'
-
 import RenderTree from '../components/RenderTree'
 
-import {
-	CollapseLeftIcon,
-	CaretLeftIcon,
-	CaretRightIcon,
-	ExpandRightIcon,
-} from '../assets/Icons'
+import { CollapseLeftIcon, ExpandRightIcon } from '../assets/Icons'
 
-const Navbar = ({
-	isNavbarCollapsed,
-	setNavbarState,
-	setFile,
-	selectedFile,
-}) => {
+const Navbar = ({ isNavbarCollapsed, setNavbarState }) => {
 	return (
 		<aside id="navbar">
 			<div id="navbar__header">
-				{/* <div id="navbar__header__nav">
-					<button>{CaretLeftIcon}</button>
-					<button>{CaretRightIcon}</button>
-				</div> */}
 				<div
 					id="navbar__header__collapse"
 					onClick={() => setNavbarState(!isNavbarCollapsed)}
@@ -30,7 +15,7 @@ const Navbar = ({
 				</div>
 			</div>
 			<div id="navbar__explorer">
-				<RenderTree setFile={setFile} />
+				<RenderTree />
 			</div>
 		</aside>
 	)

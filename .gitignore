@@ -24,5 +24,6 @@ yarn-error.log*
 
 debug.log
 
-.env
+.env.development
+.env.production
 key.pem

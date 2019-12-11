@@ -1,29 +1,35 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Treebeard } from 'react-treebeard'
 import { useQuery } from '@apollo/react-hooks'
+import mime from 'mime-types'
 
 // Queries
 import GET_EXPLORER_CONTENT from '../queries/getExplorerContent'
 
-import { FolderClosedIcon, FolderOpenIcon, FileIcon } from '../assets/Icons'
+import { Context } from '../state/context'
 
-const RenderTree = ({ setFile, selectedFile }) => {
+import { FolderCloseIcon, FolderOpenIcon, FileIcon } from '../assets/Icons'
+
+const RenderTree = () => {
+	const { dispatch } = React.useContext(Context)
 	const {
 		loading: queryLoading,
 		error: queryError,
 		data: queryData,
 	} = useQuery(GET_EXPLORER_CONTENT, {
-		variables: { path: './filesystem' },
+		variables: { path: './../apps' },
 	})
+
 	const [data, setData] = React.useState({})
 	const [cursor, setCursor] = React.useState(false)
+
 	React.useEffect(() => {
-		if (queryData.getFolderWithFiles) {
+		if (queryData && queryData.getFolderWithFiles) {
 			setData({ ...queryData.getFolderWithFiles, toggled: true })
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [queryData])
+
 	const onToggle = (node, toggled) => {
 		if (cursor) {
 			cursor.active = false
@@ -33,8 +39,18 @@ const RenderTree = ({ setFile, selectedFile }) => {
 			node.toggled = toggled
 		}
 		setCursor(node)
-		if (node.type === 'file') {
-			setFile({ path: node.path, type: node.type })
+		if (
+			node.type === 'file' &&
+			mime.lookup(node.name) === 'application/json'
+		) {
+			let index = node.path.lastIndexOf('/') + 1
+			dispatch({
+				type: 'ADD_TAB',
+				payload: {
+					name: node.path.slice(index),
+					path: node.path,
+				},
+			})
 		}
 		setData(Object.assign({}, data))
 	}
@@ -43,9 +59,9 @@ const RenderTree = ({ setFile, selectedFile }) => {
 			if (props.type === 'file') {
 				return FileIcon
 			} else if (props.toggled) {
-				return FolderOpenIcon
+				return <FolderOpenIcon />
 			}
-			return FolderClosedIcon
+			return <FolderCloseIcon />
 		},
 		Header: props => {
 			return (
@@ -109,10 +125,6 @@ const RenderTree = ({ setFile, selectedFile }) => {
 			decorators={decorators}
 		/>
 	)
-}
-
-RenderTree.propTypes = {
-	setFile: PropTypes.func.isRequired,
 }
 
 export default RenderTree

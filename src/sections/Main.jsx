@@ -1,6 +1,9 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
-import socketIOClient from 'socket.io-client'
+import Editor from '../components/Editor/Editor'
+
+import { useSubscription } from '@apollo/react-hooks'
+
+import { Context } from '../state/context'
 
 // Import Tabs Components
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
@@ -14,65 +17,25 @@ import {
 	CaretUpIcon,
 } from '../assets/Icons'
 
-// Import Queries
-import GET_FILE from '../queries/getFile'
+import OPEN_FILE_SUB from '../queries/openFile'
 
-// Import Util Functions
-import fetchCall from '../utils/fetchCall'
-import isJson from '../utils/isJson'
+const Main = () => {
+	const { state, dispatch } = React.useContext(Context)
 
-// Import State
-import { initialState, reducer } from '../state/tabs'
-
-const Main = ({ selectedFile }) => {
-	const [state, dispatch] = React.useReducer(reducer, initialState)
-	const { data: queryData } = useQuery(GET_FILE, {
-		variables: { path: selectedFile.path },
-	})
-	React.useEffect(() => {
-		if (
-			queryData &&
-			Object.keys(queryData).length !== 0 &&
-			isJson(queryData.getFile.content)
-		) {
-			dispatch({ type: 'addTab', payload: queryData.getFile })
-		}
-	}, [queryData, selectedFile])
+	const { data } = useSubscription(OPEN_FILE_SUB)
 
 	React.useEffect(() => {
-		const socket = socketIOClient(
-			'ec2-18-219-87-48.us-east-2.compute.amazonaws.com:3000'
-		)
-
-		socket.on('OpenedFiles', async (from, path) => {
-			const url = process.env.REACT_APP_GRAPHQL_URI
-			const opts = {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					query: `
-					query getFile($path: String!) {
-						getFile(path: $path) {
-							size
-							name
-							createdAt
-							content
-						}
-					}
-				`,
-					variables: {
-						path,
-					},
-				}),
-			}
-			fetchCall(url, opts).then(async data => {
-				const { getFile } = await data.data
-				if (getFile && getFile.hasOwnProperty('name')) {
-					dispatch({ type: 'addTab', payload: getFile })
-				}
+		if (data && data.openFileSub) {
+			dispatch({
+				type: 'ADD_TAB',
+				payload: {
+					name: data.openFileSub.path.split('/').pop(),
+					path: data.openFileSub.path,
+				},
 			})
-		})
-	}, [])
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data])
 
 	if (state.tabs.length === 0) {
 		return <main id="main">Select a file from the explorer.</main>
@@ -82,7 +45,7 @@ const Main = ({ selectedFile }) => {
 			<Tabs
 				index={state.currentTab}
 				onChange={index =>
-					dispatch({ type: 'setTabIndex', payload: index })
+					dispatch({ type: 'SET_TAB_INDEX', payload: index })
 				}
 			>
 				<TabList>
@@ -97,7 +60,7 @@ const Main = ({ selectedFile }) => {
 								onClick={e => {
 									e.stopPropagation()
 									dispatch({
-										type: 'removeTab',
+										type: 'REMOVE_TAB',
 										payload: index,
 									})
 								}}
@@ -111,22 +74,22 @@ const Main = ({ selectedFile }) => {
 				<TabPanels>
 					{state.tabs.map((tab, index) => (
 						<TabPanel key={index}>
-							<pre>{JSON.stringify(tab.content, null, 4)}</pre>
+							<Editor {...tab} />
 						</TabPanel>
 					))}
 				</TabPanels>
 			</Tabs>
 			<div id="tabs__navigation">
-				<span onClick={() => dispatch({ type: 'leftTab' })}>
+				<span onClick={() => dispatch({ type: 'LEFT_TAB' })}>
 					{CaretLeftIcon}
 				</span>
-				<span onClick={() => dispatch({ type: 'rightTab' })}>
+				<span onClick={() => dispatch({ type: 'RIGHT_TAB' })}>
 					{CaretRightIcon}
 				</span>
 				<span
 					onClick={() =>
 						dispatch({
-							type: 'toggleTabDropdown',
+							type: 'TOGGLE_TAB_DROPDOWN',
 							payload: !state.isTabDropDownVisible,
 						})
 					}
@@ -138,7 +101,7 @@ const Main = ({ selectedFile }) => {
 						<ul>
 							<li
 								onClick={() =>
-									dispatch({ type: 'closeAllTabs' })
+									dispatch({ type: 'CLOSE_ALL_TABS' })
 								}
 							>
 								Close All Tabs
