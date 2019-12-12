@@ -1,25 +1,15 @@
 import styled, { css, createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
-    :root {
-        --border: #E0C9C9;
-        --icon-grey: #ab9494;
-        --icon-color: #354E74;
-
-        --base-pt: 8;
-        --spacer-1: calc(var(--base-pt) * 1px);
-        --spacer-2: calc(var(--base-pt) * 2px);
-        --spacer-3: calc(var(--base-pt) * 3px);
-        --spacer-4: calc(var(--base-pt) * 4px);
-    }
+    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:200,300,400,500,600,700&display=swap');
     * {
         box-sizing: border-box;
-        font-family: sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
     }
 
     body {
         overflow: hidden;
-        font-family: sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
     }
 `
 

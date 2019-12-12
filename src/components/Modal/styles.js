@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const StyledModal = styled.div`
     width: 100%;
@@ -17,32 +17,38 @@ export const ModalCard = styled.div`
     width: 480px;
     min-height: 432px;
     background: #fff;
-    border-radius: 3px;
+    border-radius: 4px;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
 `
 
-export const Styledheader = styled.header`
-    height: 32px;
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-`
+export const Styledheader = styled.header(
+    ({ theme }) => css`
+        height: ${theme.basePt * 4}px;
+        padding: 0 ${theme.basePt * 1.5}px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid ${theme.border.color};
+    `
+)
 
-export const StyledBody = styled.main`
-    padding: 12px;
-    flex: 1;
-    max-height: 360px;
-    overflow-y: auto;
-`
+export const StyledBody = styled.main(
+    ({ theme }) => css`
+        padding: ${theme.basePt * 1.5}px;
+        flex: 1;
+        max-height: 360px;
+        overflow-y: auto;
+    `
+)
 
-export const StyledFooter = styled.footer`
-    height: 40px;
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
-    border-top: 1px solid var(--border);
-`
+export const StyledFooter = styled.footer(
+    ({ theme }) => css`
+        height: ${theme.basePt * 5}px;
+        padding: 0 ${theme.basePt * 1.5}px;
+        display: flex;
+        align-items: center;
+        border-top: 1px solid ${theme.border.color};
+    `
+)

@@ -1,49 +1,61 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const HistoryPanel = styled.div`
-    grid-area: aside;
-    overflow-y: auto;
-    height: calc(100vh - 88px);
-    border-left: 1px solid var(--border);
-    header {
-        padding: var(--spacer-2) var(--spacer-2) 0 var(--spacer-2);
-        border-bottom: 1px solid var(--border);
-        margin-bottom: calc(var(--base-pt) * 2px);
-    }
-    h3 {
-        font-size: 24px;
-        margin-bottom: calc(var(--base-pt) * 2px);
-    }
-    main {
-        padding: 0 var(--spacer-2);
-    }
-`
+export const HistoryPanel = styled.div(
+    ({ theme }) => css`
+        grid-area: aside;
+        overflow-y: auto;
+        height: calc(100vh - ${theme.basePt * 11}px);
+        border-left: 1px solid ${theme.border.color};
+        header {
+            padding: ${theme.basePt * 2}px ${theme.basePt * 2}px 0
+                ${theme.basePt * 2}px;
+            border-bottom: 1px solid ${theme.border.color};
+            margin-bottom: ${theme.basePt * 2}px;
+        }
+        h3 {
+            font-size: ${theme.basePt * 3}px;
+            margin-bottom: ${theme.basePt * 2}px;
+        }
+        main {
+            padding: 0 ${theme.basePt * 2}px;
+        }
+    `
+)
 
-export const Commit = styled.div`
-    height: 100px;
-    display: flex;
-    flex-direction: column;
-    padding: var(--spacer-2);
-    border: 1px solid var(--border);
-    margin-bottom: calc(var(--base-pt) * 2px);
-    border-radius: calc(var(--base-pt) * 0.5px);
-    & > div {
+export const Commit = styled.div(
+    ({ theme }) => css`
+        height: auto;
         display: flex;
-        justify-content: space-between;
-    }
-    & > span {
-        margin-top: auto;
-    }
-    &:hover button {
-        visibility: visible;
-    }
-    button {
-        height: 24px;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-        background: grey;
-        visibility: hidden;
-        border-radius: calc(var(--base-pt) * 0.5px);
-    }
-`
+        flex-direction: column;
+        padding: ${theme.basePt * 2}px;
+        border: 1px solid ${theme.border.color};
+        margin-bottom: ${theme.basePt * 2}px;
+        border-radius: ${theme.basePt / 2}px;
+        & > div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: ${theme.basePt * 2}px;
+            span {
+                font-weight: 400;
+                line-height: ${theme.basePt * 3}px;
+                font-size: ${theme.basePt * 2.5}px;
+            }
+        }
+        & > span {
+            margin-top: auto;
+            color: ${theme.colors.grey.light};
+        }
+        &:hover button {
+            visibility: visible;
+        }
+        button {
+            height: ${theme.basePt * 3}px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            background: grey;
+            visibility: hidden;
+            border-radius: ${theme.basePt / 2}px;
+        }
+    `
+)

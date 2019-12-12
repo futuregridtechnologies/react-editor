@@ -65,14 +65,9 @@ const EditorOptions = ({ lastSaved, draft, publish }) => {
                 <button
                     className="btn__icon"
                     title="History"
-                    style={{
-                        background: state.isHistoryVisible
-                            ? 'rgba(#000, 0.1)'
-                            : 'transparent',
-                    }}
                     onClick={() => dispatch({ type: 'TOGGLE_HISTORY_PANEL' })}
                 >
-                    <HistoryIcon color="var(--icon-grey)" />
+                    <HistoryIcon color="#9a8484" />
                 </button>
             </div>
             {lastSaved && (

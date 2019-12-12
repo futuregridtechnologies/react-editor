@@ -1,50 +1,54 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import Modal from '../../Modal'
 
-export const StyledModal = styled(Modal)`
-    header {
-        display: grid;
-        grid-template-columns: 1fr 80px;
-        grid-column-gap: var(--spacer-1);
-        input,
-        button {
-            height: 32px;
+export const StyledModal = styled(Modal)(
+    ({ theme }) => css`
+        header {
+            display: grid;
+            grid-template-columns: 1fr ${theme.basePt * 10}px;
+            grid-column-gap: ${theme.basePt}px;
+            input,
+            button {
+                height: ${theme.basePt * 10}px;
+            }
+            input {
+                padding-left: ${theme.basePt}px;
+            }
         }
-        input {
-            padding-left: var(--spacer-1);
-        }
-    }
-`
+    `
+)
 
-export const StyledFileSection = styled.section`
-    height: auto;
-    border-bottom: 1px solid var(--border);
-    padding: var(--spacer-2) 0;
-    h2 {
-        font-size: 20px;
-        padding-bottom: var(--spacer-2);
-    }
-    div {
-        height: 40px;
-        padding: 0 var(--spacer-1);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: var(--spacer-1);
-        border: 1px solid var(--border);
-        border-radius: calc(var(--base-pt) * 0.5px);
-        &:hover button {
-            visibility: visible;
+export const StyledFileSection = styled.section(
+    ({ theme }) => css`
+        height: auto;
+        border-bottom: 1px solid ${theme.border.color};
+        padding: ${theme.basePt * 2}px 0;
+        h2 {
+            font-size: ${theme.basePt * 2.5}px;
+            padding-bottom: ${theme.basePt * 2}px;
         }
-        button {
-            height: 24px;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            background: grey;
-            visibility: hidden;
-            border-radius: calc(var(--base-pt) * 0.5px);
+        div {
+            height: ${theme.basePt * 5}px;
+            padding: 0 ${theme.basePt}px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: ${theme.basePt}px;
+            border: 1px solid ${theme.border.color};
+            border-radius: ${theme.basePt / 2}px;
+            &:hover button {
+                visibility: visible;
+            }
+            button {
+                height: ${theme.basePt * 3}px;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+                background: grey;
+                visibility: hidden;
+                border-radius: ${theme.basePt / 2}px;
+            }
         }
-    }
-`
+    `
+)
