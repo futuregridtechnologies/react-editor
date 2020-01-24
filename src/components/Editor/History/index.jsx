@@ -21,7 +21,7 @@ const History = props => {
         variables: {
             path: props.path
                 .split('/')
-                .slice(0, 6)
+                .slice(0, 3)
                 .join('/'),
             commits: props.commits,
         },
