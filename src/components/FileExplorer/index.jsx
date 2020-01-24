@@ -25,21 +25,13 @@ const FileExplorer = () => {
         error: queryError,
         data: queryData,
     } = useQuery(GET_EXPLORER_CONTENT, {
-        variables: { path: './../apps' },
+        variables: { path: '' },
     })
 
     React.useEffect(() => {
         const { getFolderWithFiles: files } = queryData || {}
         if (files) {
-            const apps = files.children
-            const parsedData = apps.map(app => {
-                const data = app.children[0]
-                return {
-                    ...app,
-                    children: data.children,
-                }
-            })
-            setData(parsedData)
+            setData(files.children)
         }
     }, [queryData])
 
@@ -54,8 +46,11 @@ const FileExplorer = () => {
             dispatch({
                 type: 'ADD_TAB',
                 payload: {
-                    name: node.path.split('/').pop(),
-                    path: node.path,
+                    name: node.name,
+                    path: node.path.replace(
+                        process.env.REACT_APP_ROOT_FOLDER,
+                        ''
+                    ),
                 },
             })
     }
