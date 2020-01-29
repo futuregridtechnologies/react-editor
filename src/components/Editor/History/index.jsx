@@ -3,13 +3,16 @@ import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 
 // State
-import { Context } from '../../state'
+import { Context } from '../../../state'
 
 // Queries
-import { GET_COMMITS, GET_COMMIT_CONTENT } from '../../queries'
+import { GET_COMMITS, GET_COMMIT_CONTENT } from '../../../queries'
+
+// Styles
+import { HistoryPanel, Commit } from './styles'
 
 // Helpers
-import fetchCall from '../../utils/fetchCall'
+import fetchCall from '../../../utils/fetchCall'
 
 const History = props => {
     const { state, dispatch } = React.useContext(Context)
@@ -18,7 +21,7 @@ const History = props => {
         variables: {
             path: props.path
                 .split('/')
-                .slice(0, 6)
+                .slice(0, 3)
                 .join('/'),
             commits: props.commits,
         },
@@ -55,15 +58,15 @@ const History = props => {
 
     if (loading)
         return (
-            <div id="history__panel">
+            <HistoryPanel>
                 <header>
                     <h3>History</h3>
                 </header>
                 <main>Loading</main>
-            </div>
+            </HistoryPanel>
         )
     return (
-        <div id="history__panel">
+        <HistoryPanel>
             <header>
                 <h3>History</h3>
                 {state.tabs[state.currentTab].version && (
@@ -85,7 +88,7 @@ const History = props => {
             </header>
             <main>
                 {commits.getCommits.map((commit, index) => (
-                    <div className="commit" key={index}>
+                    <Commit key={index}>
                         <div>
                             <span>{commit.message}</span>
                             <button onClick={() => selectCommit(index)}>
@@ -100,10 +103,10 @@ const History = props => {
                                 minute: 'numeric',
                             }).format(commit.committer.timestamp * 1000)}
                         </span>
-                    </div>
+                    </Commit>
                 ))}
             </main>
-        </div>
+        </HistoryPanel>
     )
 }
 

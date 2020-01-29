@@ -1,15 +1,26 @@
 import React from 'react'
 import { useSubscription } from '@apollo/react-hooks'
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
+import { TabPanels } from '@reach/tabs'
 
 // State
-import { Context } from '../state'
+import { Context } from '../../state'
 
 // Components
-import { Editor } from '../components/'
+import { Editor } from '../../components'
+
+// Styles
+import {
+    MainWrapper,
+    TabsNav,
+    TabOptions,
+    StyledTabs,
+    StyledTabList,
+    StyledTab,
+    StyledTabPanel,
+} from './styles'
 
 // Queries
-import { OPEN_FILE } from '../queries'
+import { OPEN_FILE } from '../../queries'
 
 // Assets
 import {
@@ -18,7 +29,7 @@ import {
     CaretRightIcon,
     CaretDownIcon,
     CaretUpIcon,
-} from '../assets/Icons'
+} from '../../assets/Icons'
 
 const Main = () => {
     const { state, dispatch } = React.useContext(Context)
@@ -39,19 +50,23 @@ const Main = () => {
     }, [data])
 
     if (state.tabs.length === 0) {
-        return <main id="main">Select a file from the explorer.</main>
+        return (
+            <MainWrapper id="main">
+                Select a file from the explorer.
+            </MainWrapper>
+        )
     }
     return (
-        <main id="main">
-            <Tabs
+        <MainWrapper isSidebarVisible={state.isSidebarVisible}>
+            <StyledTabs
                 index={state.currentTab}
                 onChange={index =>
                     dispatch({ type: 'SET_TAB_INDEX', payload: index })
                 }
             >
-                <TabList>
+                <StyledTabList>
                     {state.tabs.map((tab, index) => (
-                        <Tab key={index}>
+                        <StyledTab key={index}>
                             <span title={tab.name}>{`${
                                 tab.name.length > 12
                                     ? `${tab.name.slice(0, 10)}...`
@@ -68,19 +83,19 @@ const Main = () => {
                             >
                                 {CloseIcon}
                             </span>
-                        </Tab>
+                        </StyledTab>
                     ))}
-                </TabList>
+                </StyledTabList>
 
                 <TabPanels>
                     {state.tabs.map((tab, index) => (
-                        <TabPanel key={index}>
+                        <StyledTabPanel key={index}>
                             <Editor {...tab} />
-                        </TabPanel>
+                        </StyledTabPanel>
                     ))}
                 </TabPanels>
-            </Tabs>
-            <div id="tabs__navigation">
+            </StyledTabs>
+            <TabsNav>
                 <span onClick={() => dispatch({ type: 'LEFT_TAB' })}>
                     {CaretLeftIcon}
                 </span>
@@ -98,7 +113,7 @@ const Main = () => {
                     {state.isTabDropDownVisible ? CaretUpIcon : CaretDownIcon}
                 </span>
                 {state.isTabDropDownVisible && (
-                    <div id="tab__options">
+                    <TabOptions>
                         <ul>
                             <li
                                 onClick={() =>
@@ -108,10 +123,10 @@ const Main = () => {
                                 Close All Tabs
                             </li>
                         </ul>
-                    </div>
+                    </TabOptions>
                 )}
-            </div>
-        </main>
+            </TabsNav>
+        </MainWrapper>
     )
 }
 

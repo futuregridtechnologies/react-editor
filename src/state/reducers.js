@@ -2,6 +2,14 @@ import { storeState } from './initialState'
 
 const reducers = (state, action) => {
     switch (action.type) {
+        case 'TOGGLE_SIDEBAR': {
+            const newState = {
+                ...state,
+                isSidebarVisible: !state.isSidebarVisible,
+            }
+
+            return storeState(newState)
+        }
         case 'SET_DRAFT': {
             const tabs = state.tabs
             tabs[state.currentTab] = {
