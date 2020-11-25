@@ -4,7 +4,6 @@ import GET_COMMIT_CONTENT from './getCommitContent'
 import GET_COMMITS from './getCommits'
 import GET_EXPLORER_CONTENT from './getExplorerContent'
 import { GET_FILE, GET_FILE_FETCH } from './getFile'
-import OPEN_FILE from './openFile'
 import SEARCH_FILES from './searchFiles'
 import UPDATE_FILE from './updateFile'
 
@@ -15,7 +14,6 @@ export {
     GET_EXPLORER_CONTENT,
     GET_COMMITS,
     GET_FILE,
-    OPEN_FILE,
     SEARCH_FILES,
     UPDATE_FILE,
     GET_FILE_FETCH,

@@ -62,13 +62,13 @@ const EditorOptions = ({ lastSaved, draft, publish }) => {
                 </Modal>
             )}
             <div id="left">
-                <button
+                {/* <button
                     className="btn__icon"
                     title="History"
                     onClick={() => dispatch({ type: 'TOGGLE_HISTORY_PANEL' })}
                 >
                     <HistoryIcon color="#9a8484" />
-                </button>
+                </button> */}
             </div>
             {lastSaved && (
                 <div>

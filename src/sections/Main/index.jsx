@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSubscription } from '@apollo/react-hooks'
 import { TabPanels } from '@reach/tabs'
 
 // State
@@ -19,9 +18,6 @@ import {
     StyledTabPanel,
 } from './styles'
 
-// Queries
-import { OPEN_FILE } from '../../queries'
-
 // Assets
 import {
     CloseIcon,
@@ -33,21 +29,6 @@ import {
 
 const Main = () => {
     const { state, dispatch } = React.useContext(Context)
-
-    const { data } = useSubscription(OPEN_FILE)
-
-    React.useEffect(() => {
-        if (data && data.openFileSub) {
-            dispatch({
-                type: 'ADD_TAB',
-                payload: {
-                    name: data.openFileSub.path.split('/').pop(),
-                    path: data.openFileSub.path,
-                },
-            })
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
 
     if (state.tabs.length === 0) {
         return (

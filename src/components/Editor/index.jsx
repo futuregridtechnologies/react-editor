@@ -47,7 +47,8 @@ const Editor = ({ path }) => {
         })
         fetchCall(body).then(({ data }) => {
             const { getFile } = data
-            setCode(JSON.stringify(JSON.parse(getFile.content), null, 2))
+            console.log(getFile)
+            setCode(getFile.content)
             setFile(getFile)
         })
     }, [path])
@@ -164,7 +165,7 @@ const Editor = ({ path }) => {
             <MonacoEditor
                 height="100vh"
                 width="calc(100% - 1px)"
-                language="json"
+                language="javascript"
                 theme="light"
                 value={code}
                 options={options}

@@ -1,16 +1,14 @@
 import gql from 'graphql-tag'
 
 const GET_FILE = gql`
-	query getFile($path: String!) {
-		getFile(path: $path) {
-			size
-			name
-			createdAt
-			content
-			lastSaved
-			commits
-		}
-	}
+    query getFile($path: String!) {
+        getFile(path: $path) {
+            size
+            name
+            createdAt
+            content
+        }
+    }
 `
 
 const GET_FILE_FETCH = `
@@ -20,9 +18,7 @@ const GET_FILE_FETCH = `
 			name
 			createdAt
 			content
-			commits
-			path
-			lastSaved
+			path			
 		}
 	}
 `

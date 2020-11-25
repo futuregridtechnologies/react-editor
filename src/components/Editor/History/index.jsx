@@ -19,10 +19,7 @@ const History = props => {
     const [index, setIndex] = React.useState(null)
     const { loading, data: commits } = useQuery(GET_COMMITS, {
         variables: {
-            path: props.path
-                .split('/')
-                .slice(0, 3)
-                .join('/'),
+            path: props.path.split('/').slice(0, 1).join('/'),
             commits: props.commits,
         },
     })
